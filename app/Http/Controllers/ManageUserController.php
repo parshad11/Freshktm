@@ -218,7 +218,7 @@ class ManageUserController extends Controller
             $business= Business::where('id', $business_id)->first();
             $notificationInfo=$this->notificationUtil->replaceAvailableTags($business_id,$notificationInfo,$user);
             $notificationInfo['email_settings']=$business->email_settings;
-            // $user->notify(new StaffAddedNotification($notificationInfo));
+            //$user->notify(new StaffAddedNotification($notificationInfo));
             
             //Grant Location permissions
             $this->giveLocationPermissions($user, $request);
