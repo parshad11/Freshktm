@@ -703,6 +703,7 @@ input:-moz-placeholder {
 .header-navbar .navbar-default .navbar-nav>.open>a:focus,
 .header-navbar .navbar-default .navbar-nav>.open>a:hover {
     background-color: transparent;
+    color: #bbffaf;
 }
 .header-navbar .navbar-collapse {
     padding: 0;

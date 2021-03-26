@@ -96,7 +96,18 @@
                                                                    aria-hidden="true"></i></a>
                                                         </li>
                                                     @else
-                                                        <li class="account"><a
+                                                        <li class="dropdown">
+                                                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"
+                                                               role="button"
+                                                               aria-haspopup="true" aria-expanded="false">{{auth()->guard('customer')->user()->name}}&nbsp;<i class="fa fa-user-circle-o"
+                                                                                                                                                              aria-hidden="true"></i></a>
+                                                            <ul class="dropdown-menu">
+                                                                <li><a href="{{route('customer.account')}}">Account</a></li>
+                                                                <li><a href="{{route('user.logout')}}">Log Out</a></li>
+
+                                                            </ul>
+                                                        </li>
+<!--                                                        <li class="account"><a
                                                                     href="javascript:;">{{auth()->guard('customer')->user()->name}}
                                                                 &nbsp;
                                                                 <i class="fa fa-user-circle-o"
@@ -105,7 +116,7 @@
                                                                 <li><a href="{{route('customer.account')}}">Account</a></li>
                                                                 <li><a href="{{route('user.logout')}}">Log Out</a></li>
                                                             </ul>
-                                                        </li>
+                                                        </li>-->
                                                     @endguest
                                                     <li class=""><a
                                                                 href="{{route('product.cart')}}">Cart @auth('customer')(

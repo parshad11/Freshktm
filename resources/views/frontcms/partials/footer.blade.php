@@ -11,7 +11,7 @@
                         @foreach ($blogs as $blog)
                             <div class="our-post">
                                 <img src="{{asset('uploads/img/home/blogs/'.$blog->image)}}" alt="">
-                                <p><a href="{{ route('blog_single', $blog->slug) }}">{{$blog->summary}}</a></p>
+                                <p><a href="{{ route('blog_single', $blog->slug) }}">{{$blog->title}}</a></p>
                                 <p>{{\Carbon\Carbon::parse($blog->created_at)->diffForHumans()}}</p>
                             </div>
                         @endforeach
