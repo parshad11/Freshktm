@@ -28,7 +28,9 @@
                         @if($cat_code_enabled)
                             { data: 'short_code', name: 'short_code' },
                         @endif
+                        { data: 'display_order', name: 'display_order' },
                         { data: 'description', name: 'description' },
+                        { data: 'status', name: 'status' },
                         { data: 'action', name: 'action', orderable: false, searchable: false},
                     ],
                 });

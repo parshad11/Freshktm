@@ -60,9 +60,9 @@ class ShopController extends Controller
         $products = Product::with(['product_variations.variations.product', 'unit'])->whereIn('id', $variation_location_product_ids)->paginate();
         $special_category = Category::with('sub_categories')->where('name', 'like', '%special%')->where('parent_id', 0)->first();
         if ($special_category == null) {
-            $categories = Category::with('sub_categories')->where('parent_id', 0)->get();
+            $categories = Category::with('sub_categories')->where('parent_id', 0)->active()->orderBy('display_order')->get();
         } else {
-            $categories = Category::with('sub_categories')->where('parent_id', 0)->where('id', '!=', $special_category->id)->get();
+            $categories = Category::with('sub_categories')->where('parent_id', 0)->where('id', '!=', $special_category->id)->active()->orderBy('display_order')->get();
         }
         $catalogues=Document::where('file_type','catalogue')->limit('2')->latest()->get();
         $banner = Document::where('file_type','banner')->first();
@@ -287,7 +287,7 @@ class ShopController extends Controller
 
                 $is_credit_sale = isset($input['is_credit_sale']) && $input['is_credit_sale'] == 1 ? true : false;
 
-	            $this->notificationUtil->autoSendNotification($business_id, 'new_sale', $transaction, $user);
+	           // $this->notificationUtil->autoSendNotification($business_id, 'new_sale', $transaction, $user);
 
 	            $admin = User::where('user_type', 'admin')->first();
 

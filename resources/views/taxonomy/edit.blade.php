@@ -31,8 +31,17 @@
       </div>
       @endif
       <div class="form-group">
+        {!! Form::label('display_order',  __( 'lang_v1.display_order' ) . ':*') !!}
+          {!! Form::number('display_order',  $category->display_order, ['class' => 'form-control', 'placeholder' => __( 'lang_v1.display_order' )]); !!}
+      </div>
+      <div class="form-group">
         {!! Form::label('description', __( 'lang_v1.description' ) . ':') !!}
         {!! Form::textarea('description', $category->description, ['class' => 'form-control', 'placeholder' => __( 'lang_v1.description'), 'rows' => 3]); !!}
+      </div>
+      <div class="form-group">
+      <label>
+          {!! Form::checkbox('is_active', $category->status, $is_checked_checkbox, ['class' => 'input-icheck status']); !!} {{ __('lang_v1.status_for_categories') }}
+      </label>
       </div>
       @if(!empty($parent_categories) && $enable_sub_category)
           <div class="form-group">

@@ -96,6 +96,11 @@ class Category extends Model
         return $this->hasMany(\App\Category::class, 'parent_id');
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('categories.status', 'active');
+    }
+
     /**
      * Scope a query to only include main categories.
      *

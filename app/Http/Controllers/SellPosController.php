@@ -507,7 +507,7 @@ class SellPosController extends Controller
                     $this->transactionUtil->mapPurchaseSell($business, $transaction->sell_lines, 'purchase');
                 
                     //Auto send notification
-                    $this->notificationUtil->autoSendNotification($business_id, 'new_sale', $transaction, $transaction->contact);
+                   // $this->notificationUtil->autoSendNotification($business_id, 'new_sale', $transaction, $transaction->contact);
 
                 }
                 
@@ -1146,7 +1146,7 @@ class SellPosController extends Controller
 
                 if ($status_before == 'draft' && $transaction->status == 'final') {
                     if($transaction->is_ecommerce_order==1){
-                        $this->notificationUtil->autoSendNotification($business_id, 'order_accepted', $transaction, $transaction->contact);
+                      //  $this->notificationUtil->autoSendNotification($business_id, 'order_accepted', $transaction, $transaction->contact);
                     }
                 }
 

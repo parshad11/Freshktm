@@ -44,7 +44,7 @@ class TaxonomyController extends Controller
 
             $category = Category::where('business_id', $business_id)
                             ->where('category_type', $category_type)
-                            ->select(['name', 'short_code', 'description', 'id', 'parent_id']);
+                            ->select(['name', 'short_code', 'description', 'id', 'parent_id','display_order','status']);
 
             return Datatables::of($category)
                 ->addColumn(
@@ -120,16 +120,16 @@ class TaxonomyController extends Controller
         }
 
         try {
-            $input = $request->only(['name', 'short_code', 'category_type', 'description']);
+            $input = $request->only(['name', 'short_code', 'category_type', 'description','display_order']);
             if (!empty($request->input('add_as_sub_cat')) &&  $request->input('add_as_sub_cat') == 1 && !empty($request->input('parent_id'))) {
                 $input['parent_id'] = $request->input('parent_id');
             } else {
                 $input['parent_id'] = 0;
             }
+            $input['status'] = !empty($request->input('is_active')) ? 'active' : 'inactive';
             $input['slug'] = Str::slug($request->name);
             $input['business_id'] = $request->session()->get('user.business_id');
             $input['created_by'] = $request->session()->get('user.id');
-
             $category = Category::create($input);
             $output = ['success' => true,
                             'data' => $category,
@@ -190,8 +190,14 @@ class TaxonomyController extends Controller
                 $selected_parent = $category->parent_id ;
             }
 
+            if ($category->status == 'active') {
+                $is_checked_checkbox = true;
+            } else {
+                $is_checked_checkbox = false;
+            }
+
             return view('taxonomy.edit')
-                ->with(compact('category', 'parent_categories', 'is_parent', 'selected_parent', 'module_category_data'));
+                ->with(compact('category', 'parent_categories', 'is_parent', 'selected_parent', 'module_category_data','is_checked_checkbox'));
         }
     }
 
@@ -207,17 +213,18 @@ class TaxonomyController extends Controller
 
         if (request()->ajax()) {
             try {
-                $input = $request->only(['name', 'description']);
+                $input = $request->only(['name', 'description','display_order']);
                 $business_id = $request->session()->get('user.business_id');
 
                 $category = Category::where('business_id', $business_id)->findOrFail($id);
                 $category->name = $input['name'];
                 $category->description = $input['description'];
+                $category->display_order = $input['display_order'];
 
                 if (!empty($request->input('short_code'))) {
                     $category->short_code = $request->input('short_code');
                 }
-                
+                $category->status = !empty($request->input('is_active')) ? 'active' : 'inactive';
                 if (!empty($request->input('add_as_sub_cat')) &&  $request->input('add_as_sub_cat') == 1 && !empty($request->input('parent_id'))) {
                     $category->parent_id = $request->input('parent_id');
                 } else {

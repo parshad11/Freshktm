@@ -63,9 +63,17 @@ class ShopController extends Controller
 	}
 
 	public function documents(){
-		$banner = Document::where('file_type','banner')->first();
+		$path=asset('/uploads/shop/');
+		$banner = Document::where('file_type','banner')
+				  ->select(
+					  'documents.id',
+					  DB::raw("CONCAT('$path','/',documents.file_name) as banner_image"),
+				  )
+				  ->first();
 		$catalogues=Document::where('file_type','catalogue')->limit('2')->latest()->get();
-						
+		$document=[];
+		$document=$banner;	
+		$banner=collect([$document]);	
 		return response()->json([
 			'banner' => $banner,
 			'catalogues' => $catalogues,

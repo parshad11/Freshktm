@@ -119,7 +119,7 @@ class ContactUtil extends Util
                 $notificationUtil=new NotificationUtil();
                 $notificationInfo=$notificationUtil->replaceAvailableTags($contact->business_id,$notificationInfo,$contact);
                 $notificationInfo['email_settings']=$business->email_settings;
-               // $contact->notify(new CustomerNotification($notificationInfo));
+              // $contact->notify(new CustomerNotification($notificationInfo));
             }
 
             //Add opening balance

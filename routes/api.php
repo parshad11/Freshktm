@@ -43,6 +43,7 @@ Route::namespace('Api')->middleware(['cors'])->group(function () {
 		Route::get('/shop/remov-from-cart/{id}', 'CartController@removeFromCart');
 		Route::get('/shop/checkout', 'ShopController@checkout');
 		Route::post('/shop/checkout', 'ShopController@store');
+		Route::post('/shop/search','ProductController@search');
 	});
 		route::get('/delivery/location/{id}', 'DeliveryPersonController@getLocation')->name('delivery.location');
 

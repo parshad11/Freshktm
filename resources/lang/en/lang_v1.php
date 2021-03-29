@@ -559,6 +559,7 @@ return [
     'for_more_info' => 'for more info',
     'username_help' => 'Leave blank to auto generate username',
     'status_for_user' => 'Is active ?',
+    'status_for_categories' => 'Is active ?',
     'tooltip_enable_user_active' => 'Check/Uncheck to make a user active/inactive.',
     'user_inactive' => 'Sorry, account is inactive',
     'calculator' => 'Calculator',
@@ -1215,5 +1216,6 @@ return [
     'new_record'=>'New Record',
     'staff_notifications'=>'Staff Notification',
     'order_accepted'=>'Order Accepted',
+    'display_order'=>'Display Order',
 
 ];

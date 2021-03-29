@@ -389,7 +389,7 @@ class PurchaseController extends Controller
                 $business = Business::where('id', $business_id)->first();
                 $notificationInfo = $this->notificationUtil->replaceAvailableTags($business_id, $notificationInfo, $transaction);
                 $notificationInfo['email_settings'] = $business->email_settings;
-                $transaction->contact->notify(new SupplierNotification($notificationInfo));
+               // $transaction->contact->notify(new SupplierNotification($notificationInfo));
             }
 
             DB::commit();
