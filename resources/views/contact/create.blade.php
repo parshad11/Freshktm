@@ -184,6 +184,13 @@
               </div>
             </div>
         </div>
+        <div class=" col-sm-4 ">
+			<div class="form-group">
+				{!! Form::label('default_delivery_person_id', __('delivery.default_delivery_person') . ':') !!}
+				{!! Form::select('default_delivery_person_id',$delivery_people, null, ['class' => 'form-control select2', 'placeholder' => __('messages.please_select'),'id' => 'delivery_person_id', 'style' => 'width: 100%;' ]); !!}
+			
+			</div>
+	   </div>
 
         <!-- lead additional field -->
         <div class="col-md-4 lead_additional_div">
@@ -366,6 +373,7 @@
             </div>
         </div>
       </div>
+      
 
       <div class="clearfix"></div>
       <div class="col-md-4">
