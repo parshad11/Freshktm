@@ -452,7 +452,7 @@
 </section>
 
 <div class="modal fade contact_modal" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
-	@include('contact.create', ['quick_add' => true])
+	@include('contact.create', ['quick_add' => true,'delivery_people=>$delivery_people'])
 </div>
 <!-- /.content -->
 <div class="modal fade register_details_modal" tabindex="-1" role="dialog"

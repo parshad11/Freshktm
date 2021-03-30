@@ -1217,5 +1217,9 @@ return [
     'staff_notifications'=>'Staff Notification',
     'order_accepted'=>'Order Accepted',
     'display_order'=>'Display Order',
+    'six_months'=>'Six Months',
+    'one_month'=>'One Month',
+    'fifteen_days'=>'Fifteen Days',
+    'one_week'=>'One Week',
 
 ];

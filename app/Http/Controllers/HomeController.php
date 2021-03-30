@@ -216,20 +216,33 @@ class HomeController extends Controller
             }
         }
 
+        $collectionDueDate=$this->transactionUtil->getCollectionDueDate();
         if ($request->ajax()) {
             $today = Carbon::now();
             $dateStartOfYear = $today->copy()->startOfYear();
             $dateOfSixMonths = $dateStartOfYear->addMonth(6);
             $dateOfEndOfYear = $today->copy()->endOfYear();
-           
+
             if($today->between($dateStartOfYear,$dateOfSixMonths)){
                 $endPeriod=$dateOfSixMonths;
             }
             else {
                 $endPeriod=$dateOfEndOfYear;
             }
-      
-
+            
+             if(!empty(request()->collection_due_date)){
+                $collection_due_date = request()->get('collection_due_date');
+                $endPeriod=$today->addDays($collection_due_date);
+                if (auth()->user()->can('record.view') && auth()->user()->can('record.view_own')) {
+                    $records = $this->recordUtil->getListRecords($business_id)->whereBetween('expected_collection_date', [$today, $endPeriod]);
+                } 
+                elseif (!auth()->user()->can('record.view') && auth()->user()->can('record.view_own')) {
+                    $records = $this->recordUtil->getListRecords($business_id)->whereBetween('expected_collection_date', [$today, $endPeriod])
+                        ->where('records.created_by', auth()->user()->id);
+                }
+                
+             }
+           
             if (auth()->user()->can('record.view') && auth()->user()->can('record.view_own')) {
                 $records = $this->recordUtil->getListRecords($business_id)->whereBetween('expected_collection_date', [$today, $endPeriod]);
             } 
@@ -237,10 +250,7 @@ class HomeController extends Controller
                 $records = $this->recordUtil->getListRecords($business_id)->whereBetween('expected_collection_date', [$today, $endPeriod])
                     ->where('records.created_by', auth()->user()->id);
             }
-            $permitted_locations = auth()->user()->permitted_locations();
-            if ($permitted_locations != 'all') {
-                $records->whereIn('records.location_id', $permitted_locations);
-            }
+           
 
             return Datatables::of($records)
                 ->addIndexColumn()
@@ -270,7 +280,7 @@ class HomeController extends Controller
                 ->make(true);
         }
 
-        return view('home.index', compact('date_filters', 'sells_chart_1', 'sells_chart_2', 'widgets', 'all_locations'));
+        return view('home.index', compact('date_filters', 'sells_chart_1', 'sells_chart_2', 'widgets', 'all_locations','collectionDueDate'));
     }
 
     /**

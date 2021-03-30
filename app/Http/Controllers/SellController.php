@@ -8,6 +8,7 @@ use App\BusinessLocation;
 use App\Contact;
 use App\CustomerGroup;
 use App\Delivery;
+use App\DeliveryPerson;
 use App\InvoiceScheme;
 use App\SellingPriceGroup;
 use App\TaxRate;
@@ -519,6 +520,7 @@ class SellController extends Controller
         }
 
         $status = request()->get('status', '');
+        $delivery_people = DeliveryPerson::forDropdown();
 
         return view('sell.create')
             ->with(compact(
@@ -542,7 +544,8 @@ class SellController extends Controller
                 'types_of_service',
                 'accounts',
                 'shipping_statuses',
-                'status'
+                'status',
+                'delivery_people'
             ));
     }
 

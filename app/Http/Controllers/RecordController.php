@@ -37,7 +37,6 @@ class RecordController extends Controller
         $sales_representative = User::forDropdown($business_id, false, false, true);
         
         if ($request->ajax()) {
-            
             $records = $this->recordUtil->getListRecords($business_id);
             $permitted_locations = auth()->user()->permitted_locations();
             if ($permitted_locations != 'all') {

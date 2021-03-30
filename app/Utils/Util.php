@@ -1130,6 +1130,8 @@ class Util
         return $assignStatuses;
     }
 
+    
+
     public function deliveryStatuses()
     {
         $deliveryStatuses = [
@@ -1142,6 +1144,21 @@ class Util
 
         return $deliveryStatuses ;
     }
+
+    
+    public function  getCollectionDueDate()
+    {
+        $collectionDueDate = [
+            180 => __('lang_v1.six_months'),
+            30 => __('lang_v1.one_month'),
+            15 => __('lang_v1.fifteen_days'),
+            7 => __('lang_v1.one_week'),
+            
+        ];
+
+        return $collectionDueDate ;
+    }
+
 
     public function draftTypes()
     {

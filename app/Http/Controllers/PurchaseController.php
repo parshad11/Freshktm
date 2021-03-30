@@ -278,13 +278,13 @@ class PurchaseController extends Controller
 
         $payment_line = $this->dummyPaymentLine;
         $payment_types = $this->productUtil->payment_types(null, true);
-
+        $delivery_people = DeliveryPerson::forDropdown();
 
         //Accounts
         $accounts = $this->moduleUtil->accountsDropdown($business_id, true);
 
         return view('purchase.create')
-            ->with(compact('taxes', 'orderStatuses', 'business_locations', 'currency_details', 'default_purchase_status', 'default_delivery_status', 'customer_groups', 'types', 'shortcuts', 'payment_line', 'payment_types', 'accounts', 'bl_attributes'));
+            ->with(compact('taxes', 'orderStatuses', 'business_locations', 'currency_details', 'default_purchase_status', 'default_delivery_status', 'customer_groups', 'types', 'shortcuts', 'payment_line', 'payment_types', 'accounts', 'bl_attributes','delivery_people'));
     }
 
     /**

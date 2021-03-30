@@ -162,12 +162,12 @@
         @if(!empty($all_locations))
                 <div class="row">
                 <div class="col-sm-12">
-                    @component('components.widget', ['class' => 'box-primary', 'title' => __('All Supplier Records')])
+                    @component('components.widget', ['class' => 'box-primary', 'title' => __('All Supplier Records For Current Harvest Period')])
                         @if (auth()->user()->can('record.view') || auth()->user()->can('record.view_own'))
                         <div class="row" style="margin-bottom: 10px;">
                         <div class="col-md-4 col-sm-12">
                         {!! Form::label('date', __('product.collection_due_date') . ':') !!}
-                        {!! Form::select('type', ['single' => __('lang_v1.single'), 'variable' => __('lang_v1.variable')], null, ['class' => 'form-control select2', 'id' => 'product_list_filter_type', 'placeholder' => __('lang_v1.all')]); !!}
+                        {!! Form::select('filter_collection_due_date',$collectionDueDate, null, ['class' => 'form-control select2', 'id' => 'filter_collection_due_date', 'placeholder' => __('lang_v1.all')]); !!}
                         </div>
                         </div>
                             <table class="table table-bordered table-striped" id="record_table">
@@ -302,12 +302,14 @@
     @endif
 
     <script type="text/javascript">
+    $(document).ready( function(){
         record_table = $('#record_table').DataTable({
             processing: true,
             serverSide: true,
             "ajax": {
                 "url": "/home",
                 "data": function (d) {
+                  d.collection_due_date = $('#filter_collection_due_date').val();
                 }
             },
             columns: [
@@ -324,6 +326,10 @@
                 __currency_convert_recursively($('#record_table'));
             }
         });
+        $(document).on('change', '#filter_collection_due_date',  function() {
+        record_table.ajax.reload();
+    });
+  });
     </script>
 @endsection
 
