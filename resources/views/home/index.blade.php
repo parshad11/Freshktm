@@ -160,10 +160,16 @@
           	</div>
         @endif
         @if(!empty($all_locations))
-            <div class="row">
+                <div class="row">
                 <div class="col-sm-12">
-                    @component('components.widget', ['class' => 'box-primary', 'title' => __('Supplier Records For Current 6 Months')])
+                    @component('components.widget', ['class' => 'box-primary', 'title' => __('All Supplier Records')])
                         @if (auth()->user()->can('record.view') || auth()->user()->can('record.view_own'))
+                        <div class="row" style="margin-bottom: 10px;">
+                        <div class="col-md-4 col-sm-12">
+                        {!! Form::label('date', __('product.collection_due_date') . ':') !!}
+                        {!! Form::select('type', ['single' => __('lang_v1.single'), 'variable' => __('lang_v1.variable')], null, ['class' => 'form-control select2', 'id' => 'product_list_filter_type', 'placeholder' => __('lang_v1.all')]); !!}
+                        </div>
+                        </div>
                             <table class="table table-bordered table-striped" id="record_table">
                                 <thead>
                                 <tr>

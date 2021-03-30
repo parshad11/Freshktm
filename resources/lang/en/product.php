@@ -54,6 +54,7 @@ return [
     'exp_date' => 'EXP Date',
     'view_product' => 'View Product',
     'market_price' => 'Market Price',
+    'collection_due_date' => 'Collection Due Date',
     'add_product' => 'Add Product',
     'variations' => 'Variations',
     'import_products' => 'Import Products',

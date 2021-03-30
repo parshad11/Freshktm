@@ -48,6 +48,10 @@ class Contact extends Authenticatable
         return $this->belongsTo(\App\Business::class);
     }
 
+    public function delivery_person(){
+        return $this->belongsTo(DeliveryPerson::class,'default_delivery_person_id');
+    }
+
     public function scopeActive($query)
     {
         return $query->where('contacts.contact_status', 'active');

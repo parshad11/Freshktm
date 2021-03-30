@@ -450,8 +450,9 @@ class DeliveryController extends Controller
                                         'location'
                                     )
                                     ->first();
+        $default_delivery_person=$transaction->contact->delivery_person;
          return view('delivery.assign')
-             ->with(compact('transaction', 'deliveryStatuses'));
+             ->with(compact('transaction', 'deliveryStatuses','default_delivery_person'));
         
     }
 

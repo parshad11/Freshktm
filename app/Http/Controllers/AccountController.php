@@ -40,7 +40,7 @@ class AccountController extends Controller
 		}
 
 		$business_id = session()->get('user.business_id');
-		if (requetast()->ajax()) {
+		if (request()->ajax()) {
 			$accounts = Account::leftjoin('account_transactions as AT', function ($join) {
 				$join->on('AT.account_id', '=', 'accounts.id');
 				$join->whereNull('AT.deleted_at');
