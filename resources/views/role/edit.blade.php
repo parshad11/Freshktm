@@ -635,7 +635,7 @@
         </div>
         
         <hr>
-        <div class="row check_group">
+        <!-- <div class="row check_group">
         <div class="col-md-1">
           <h4>@lang( 'role.brand' )</h4>
         </div>
@@ -681,7 +681,7 @@
           </div>
         </div>
         </div>
-        <hr>
+        <hr> -->
         <div class="row check_group">
         <div class="col-md-1">
           <h4>@lang( 'role.tax_rate' )</h4>

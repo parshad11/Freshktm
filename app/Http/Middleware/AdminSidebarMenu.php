@@ -290,13 +290,13 @@ class AdminSidebarMenu
                             );
                         }
 
-                        if (auth()->user()->can('access_shipping')) {
-                            $sub->url(
-                                action('SellController@shipments'),
-                                __('lang_v1.shipments'),
-                                ['icon' => 'fa fas fa-truck', 'active' => request()->segment(1) == 'shipments']
-                            );
-                        }
+                        // if (auth()->user()->can('access_shipping')) {
+                        //     $sub->url(
+                        //         action('SellController@shipments'),
+                        //         __('lang_v1.shipments'),
+                        //         ['icon' => 'fa fas fa-truck', 'active' => request()->segment(1) == 'shipments']
+                        //     );
+                        // }
 
                         if (auth()->user()->can('discount.access')) {
                             $sub->url(

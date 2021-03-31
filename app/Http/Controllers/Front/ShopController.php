@@ -57,7 +57,11 @@ class ShopController extends Controller
     {
         $location = BusinessLocation::where('location_id', 'BL0001')->first();
         $variation_location_product_ids = VariationLocationDetails::with('location')->where('location_id', $location->id)->pluck('product_id')->toArray();
-        $products = Product::with(['product_variations.variations.product', 'unit'])->whereIn('id', $variation_location_product_ids)->paginate();
+        $products = Product::with(['product_variations.variations.product', 'unit','category'])
+                    ->whereHas('category',function($query){
+                                    $query->where('categories.status','active');
+                                })
+                                ->whereIn('id', $variation_location_product_ids)->paginate();
         $special_category = Category::with('sub_categories')->where('name', 'like', '%special%')->where('parent_id', 0)->first();
         if ($special_category == null) {
             $categories = Category::with('sub_categories')->where('parent_id', 0)->active()->orderBy('display_order')->get();

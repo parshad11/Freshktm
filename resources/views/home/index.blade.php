@@ -179,6 +179,7 @@
                                     <th>Quantity</th>
                                     <th>Unit</th>
                                     <th>Expected Collection Date</th>
+                                    <th>Due Days</th>
                                     <th>Supplier Location</th>
                                     <th>@lang('lang_v1.added_by')</th>
                                 </tr>
@@ -319,6 +320,7 @@
                 {data: 'quantity', name: 'quantity'},
                 {data: 'unit', name: 'units.actual_name',orderable: false},
                 {data: 'expected_collection_date', name: 'expected_collection_date'},
+                {data: 'due_days', name: 'due_days'},
                 {data: 'location', name: 'location'},
                 {data: 'added_by', name: 'u.first_name'},
             ],

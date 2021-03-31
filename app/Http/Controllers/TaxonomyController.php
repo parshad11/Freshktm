@@ -261,6 +261,8 @@ class TaxonomyController extends Controller
                 $business_id = request()->session()->get('user.business_id');
 
                 $category = Category::where('business_id', $business_id)->findOrFail($id);
+                $category->status='inactive';
+                $category->save();
                 $category->delete();
 
                 $output = ['success' => true,
