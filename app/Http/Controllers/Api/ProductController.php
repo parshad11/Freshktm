@@ -29,6 +29,7 @@ class ProductController extends Controller
 					->leftJoin('categories as sc','products.sub_category_id','=','sc.id')
 					->leftJoin('media as m','m.model_id','=','v.id')
 					->whereIn('v.id', $variation_location_variation_ids)
+					->where('c.status','active')
 					->select(
 						'products.id',
 						'products.name',
@@ -48,7 +49,8 @@ class ProductController extends Controller
 						'sc.parent_id',
 						DB::raw("CONCAT('$path','/',m.file_name) as product_image")
 					)
-					->get();
+					->orderBy('set_featured','DESC')->orderBy('id','DESC')
+					->paginate();
 						
 		return response()->json([
 			'product' => $products,
@@ -56,18 +58,20 @@ class ProductController extends Controller
 	}
 
 	public function categories(){
-		$special_cat = Category::with('sub_categories')->where('name', 'like', '%special%')->where('parent_id', 0)->first();
-        if ($special_cat == null) {
-            $all_categories = Category::with('sub_categories')->where('parent_id', 0)->get();
+		$special_categories = Category::with('sub_categories')->where('name', 'like', '%special%')->where('parent_id', 0)->first();
+        if ($special_categories == null) {
+            $all_categories = Category::with('sub_categories')->where('parent_id', 0)->active()->orderBy('display_order')->get();
         } else {
-            $all_categories = Category::with('sub_categories')->where('parent_id', 0)->where('id', '!=', $special_cat->id)->get();
+            $all_categories = Category::with('sub_categories')->where('parent_id', 0)->where('id', '!=', $special_categories->id)->active()->orderBy('display_order')->get();
         }
 		
 		return response()->json([
 			'categories' => $all_categories,
-			'special_category'=>$special_cat
+			'special_category'=>$special_categories
 		]);
 	}
+
+	
 
 	public function product($slug)
 	{

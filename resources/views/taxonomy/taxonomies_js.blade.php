@@ -49,7 +49,6 @@
             .find('button[type="submit"]')
             .attr('disabled', true);
         var data = $(this).serialize();
-
         $.ajax({
             method: 'POST',
             url: $(this).attr('action'),

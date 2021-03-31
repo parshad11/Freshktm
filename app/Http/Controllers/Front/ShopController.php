@@ -61,7 +61,7 @@ class ShopController extends Controller
                     ->whereHas('category',function($query){
                                     $query->where('categories.status','active');
                                 })
-                                ->whereIn('id', $variation_location_product_ids)->paginate();
+                                ->whereIn('id', $variation_location_product_ids)->orderBy('set_featured','DESC')->orderBy('id','DESC')->paginate();
         $special_category = Category::with('sub_categories')->where('name', 'like', '%special%')->where('parent_id', 0)->first();
         if ($special_category == null) {
             $categories = Category::with('sub_categories')->where('parent_id', 0)->active()->orderBy('display_order')->get();
