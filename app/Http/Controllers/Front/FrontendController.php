@@ -92,7 +92,7 @@ class FrontendController extends Controller
     public function getTeam()
     {
         $about_details = FrontAbout::first();
-        $teams = Team::where('status', 'active')->paginate(4);
+        $teams = Team::where('status', 'active')->get();
         return view('frontcms.team')
             ->with('about_info', $about_details)
             ->with('teams', $teams);

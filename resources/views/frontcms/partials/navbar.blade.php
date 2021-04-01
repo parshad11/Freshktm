@@ -82,7 +82,7 @@
                                     @if(Request::segment(1) != 'shop')
                                         <div class="col-md-2 quote_div">
                                             <div class="quote-box">
-                                                <a href="#quote" id="get_quote">Contact Us</a>
+                                                <a href="{{route('contact')}}" id="">Contact Us</a>
                                             </div>
                                         </div>
                                     @else

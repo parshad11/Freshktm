@@ -35,9 +35,6 @@
             @endforeach
             @endif
         </div>
-        @if(isset($teams))
-            {!! $teams->links('frontcms.pagination') !!}
-            @endif
     </div>
 </section>
 @endsection
