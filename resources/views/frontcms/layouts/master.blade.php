@@ -213,7 +213,6 @@
             type = 'error';
         }
         Swal.fire({
-            position: 'top-end',
             icon: type,
             title: message,
             showConfirmButton: false,
