@@ -35,6 +35,7 @@ use App\Category;
 use App\Contact;
 use App\CustomerGroup;
 use App\Delivery;
+use App\DeliveryPerson;
 use App\Media;
 use App\Product;
 use App\SellingPriceGroup;
@@ -247,7 +248,7 @@ class SellPosController extends Controller
 
         $invoice_schemes = InvoiceScheme::forDropdown($business_id);
         $default_invoice_schemes = InvoiceScheme::getDefault($business_id);
-
+        $delivery_people = DeliveryPerson::forDropdown();
         return view('sale_pos.create')
             ->with(compact(
                 'business_locations',
@@ -265,6 +266,7 @@ class SellPosController extends Controller
                 'pos_settings',
                 'change_return',
                 'types',
+                'delivery_people',
                 'customer_groups',
                 'accounts',
                 'price_groups',
@@ -961,9 +963,9 @@ class SellPosController extends Controller
         }
 
         $invoice_layouts = InvoiceLayout::forDropdown($business_id);
-
+        $delivery_people = DeliveryPerson::forDropdown();
         return view('sale_pos.edit')
-            ->with(compact('business_details', 'taxes', 'payment_types', 'walk_in_customer', 'sell_details', 'transaction', 'payment_lines', 'location_printer_type', 'shortcuts', 'commission_agent', 'categories', 'pos_settings', 'change_return', 'types', 'customer_groups', 'brands', 'accounts', 'waiters', 'redeem_details', 'edit_price', 'edit_discount', 'shipping_statuses', 'warranties', 'sub_type', 'pos_module_data', 'invoice_schemes', 'default_invoice_schemes', 'invoice_layouts', 'featured_products'));
+            ->with(compact('business_details', 'taxes','delivery_people', 'payment_types', 'walk_in_customer', 'sell_details', 'transaction', 'payment_lines', 'location_printer_type', 'shortcuts', 'commission_agent', 'categories', 'pos_settings', 'change_return', 'types', 'customer_groups', 'brands', 'accounts', 'waiters', 'redeem_details', 'edit_price', 'edit_discount', 'shipping_statuses', 'warranties', 'sub_type', 'pos_module_data', 'invoice_schemes', 'default_invoice_schemes', 'invoice_layouts', 'featured_products'));
     }
 
     /**

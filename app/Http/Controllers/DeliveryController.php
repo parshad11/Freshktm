@@ -450,6 +450,7 @@ class DeliveryController extends Controller
                                         'location'
                                     )
                                     ->first();
+                                 
         $default_delivery_person=$transaction->contact->delivery_person;
          return view('delivery.assign')
              ->with(compact('transaction', 'deliveryStatuses','default_delivery_person'));
@@ -590,7 +591,6 @@ class DeliveryController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $delivery_people=DeliveryPerson::getAllDeliveryPerson();
-        dd($delivery_people);
         return view('delivery.track',compact('delivery_people'));
     }
 
