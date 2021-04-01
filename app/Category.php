@@ -96,6 +96,10 @@ class Category extends Model
         return $this->hasMany(\App\Category::class, 'parent_id');
     }
 
+    public function products(){
+        return $this->hasMany(\App\Product::class);
+    }
+
     public function scopeActive($query)
     {
         return $query->where('categories.status', 'active');

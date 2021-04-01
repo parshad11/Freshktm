@@ -34,7 +34,7 @@ class DeliveryPerson extends Model
      */
     public static function getAllDeliveryPerson()
     {
-        $deliveryPerson = DeliveryPerson::get()->pluck('latitude','longitude')->toArray();
+        $deliveryPerson = DeliveryPerson::get();
         return $deliveryPerson;
     }
 

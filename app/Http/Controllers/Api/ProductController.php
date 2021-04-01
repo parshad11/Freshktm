@@ -60,11 +60,11 @@ class ProductController extends Controller
 	}
 
 	public function categories(){
-		$special_categories = Category::with('sub_categories')->where('name', 'like', '%special%')->where('parent_id', 0)->first();
+		$special_categories = Category::with(['sub_categories','products'])->where('name', 'like', '%special%')->where('parent_id', 0)->first();
         if ($special_categories == null) {
-            $all_categories = Category::with('sub_categories')->where('parent_id', 0)->active()->orderBy('display_order')->get();
+            $all_categories = Category::with(['sub_categories','products'])->where('parent_id', 0)->active()->orderBy('display_order')->get();
         } else {
-            $all_categories = Category::with('sub_categories')->where('parent_id', 0)->where('id', '!=', $special_categories->id)->active()->orderBy('display_order')->get();
+            $all_categories = Category::with(['sub_categories','products'])->where('parent_id', 0)->where('id', '!=', $special_categories->id)->active()->orderBy('display_order')->get();
         }
 		
 		return response()->json([
