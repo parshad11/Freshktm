@@ -133,7 +133,12 @@ class ProductController extends Controller
 		->select(
 			'products.name as name',
 			'variations.name as variation_name',
+			'products.product_description',
+			'variations.market_price',
+			'variations.id as variation_id',
 			'variations.sub_sku as sub_sku',
+			'variations.default_sell_price as unit_price',
+			'variations.sell_price_inc_tax as unit_price_with_tax',
 			DB::raw("CONCAT('$path','/',m.file_name) as product_image")
 		)
 		->get();
