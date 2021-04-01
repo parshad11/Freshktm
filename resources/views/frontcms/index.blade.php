@@ -679,3 +679,31 @@
         </section>
     @endif
 @endsection
+@section('scripts')
+    @if (session()->has('success'))
+        <script>
+            $(document).ready(function () {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Order Added Successfully',
+                    showConfirmButton: false,
+                    timer: 5000
+                })
+            })
+        </script>
+    @endif
+    @if (session()->has('error'))
+        <script>
+            $(document).ready(function () {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: "{{Session::get('error')}}",
+                    showConfirmButton: false,
+                    timer: 3000
+                })
+            })
+        </script>
+    @endif
+@endsection
