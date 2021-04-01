@@ -50,28 +50,17 @@
                               'data': {
                               'type': 'FeatureCollection',
                               'features': [
-                              {
-                              // feature for Mapbox DC
-                              'type': 'Feature',
-                              'geometry': {
-                              'type': 'Point',
-                              'coordinates': [85.4078776264891,27.67219195893744]
-                              },
-                              'properties': {
-                              'title': 'Mapbox DC'
-                              }
-                              },
-                              {
-                              // feature for Mapbox SF
-                              'type': 'Feature',
-                              'geometry': {
-                              'type': 'Point',
-                              'coordinates': [85.43323063127997,27.666676128491275]
-                              },
-                              'properties': {
-                              'title': 'Mapbox SF'
-                              }
-                              }
+                                   {
+                                   // feature for Mapbox DC
+                                   'type': 'Feature',
+                                   'geometry': {
+                                   'type': 'Point',
+                                   'coordinates': [85.4078776264891,27.67219195893744]
+                                   },
+                                   'properties': {
+                                   'title': 'Mapbox DC'
+                                   }
+                                   }
                               ]
                               }
                          });

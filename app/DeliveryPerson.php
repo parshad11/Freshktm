@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class DeliveryPerson extends Model
@@ -32,10 +33,17 @@ class DeliveryPerson extends Model
      *
      * @return object
      */
-    public static function getAllDeliveryPerson()
+    public static function getAllDeliveryPeople()
     {
-        $deliveryPerson = DeliveryPerson::get();
-        return $deliveryPerson;
+        $deliveryPeople = DeliveryPerson::leftJoin('users as u','delivery_people.user_id','=','u.id')
+                        ->select(
+                            DB::raw("CONCAT(COALESCE(u.surname, ''),' ',COALESCE(u.first_name, ''),' ',COALESCE(u.last_name,'')) as delivery_person"),
+                            'delivery_people.latitude',
+                            'delivery_people.longitude',
+                        )
+                        ->get();
+        $deliveryPeople=Arr::pluck($deliveryPeople,'latitude','delivery_person');
+        return $deliveryPeople;
     }
 
     public static function forDropdown()

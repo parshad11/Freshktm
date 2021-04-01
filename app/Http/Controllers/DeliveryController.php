@@ -590,7 +590,8 @@ class DeliveryController extends Controller
         if (!auth()->user()->can('delivery.view')) {
             abort(403, 'Unauthorized action.');
         }
-        $delivery_people=DeliveryPerson::getAllDeliveryPerson();
+        $delivery_people=DeliveryPerson::getAllDeliveryPeople();
+        dd($delivery_people);
         return view('delivery.track',compact('delivery_people'));
     }
 
