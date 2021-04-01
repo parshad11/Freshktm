@@ -27,6 +27,17 @@ class DeliveryPerson extends Model
         return $this->belongsTo(User::class,'user_id');
     }
 
+      /**
+     * Creates a new user based on the input provided.
+     *
+     * @return object
+     */
+    public static function getAllDeliveryPerson()
+    {
+        $deliveryPerson = DeliveryPerson::get()->pluck('latitude','longitude')->toArray();
+        return $deliveryPerson;
+    }
+
     public static function forDropdown()
     {
         $deliveryPeople = DeliveryPerson::leftJoin('users','delivery_people.user_id','=','users.id')

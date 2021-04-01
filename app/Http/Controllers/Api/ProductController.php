@@ -50,7 +50,7 @@ class ProductController extends Controller
 						DB::raw("CONCAT('$path','/',m.file_name) as product_image")
 					)
 					->orderBy('set_featured','DESC')->orderBy('id','DESC')
-					->paginate();
+					->get();
 						
 		return response()->json([
 			'product' => $products,

@@ -575,11 +575,24 @@ class DeliveryController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->can('delivery.view')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $delivery = Delivery::with(['delivery_person', 'transaction', 'record_staff'])->findorfail($id);
         $delivery_person = $this->moduleUtil->getDeliveryUser($delivery->delivery_person_id);
         return view('delivery.show', compact('delivery', 'delivery_person'));
     }
 
+    public function trackDeliveryPeople()
+    {
+        if (!auth()->user()->can('delivery.view')) {
+            abort(403, 'Unauthorized action.');
+        }
+        $delivery_people=DeliveryPerson::getAllDeliveryPerson();
+        dd($delivery_people);
+        return view('delivery.track',compact('delivery_people'));
+    }
 
 
     /**
