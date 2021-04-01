@@ -15,6 +15,30 @@
 
 	{!! Form::open(['url' => action('DeliveryController@store'), 'method' => 'post', 'id' => 'assign_delivery_form', 'files' => true ]) !!}
 	    @component('components.widget', ['class' => 'box-primary'])
+				<div class="row">
+                <input type="hidden" id="transaction_id" value="{{ $transaction->id }}" name="transaction_id">
+				<div class="col-md-12 " style="display:flex;justify-content: space-between;">
+						<div class=" col-sm-4 ">
+							<div class="form-group">
+								{!! Form::label('delivery_person_id', __('delivery.delivery_person') . ':*') !!}
+								<div class="input-group">
+						<span class="input-group-addon">
+							<i class="fa fa-user"></i>
+						</span>
+									{!! Form::select('delivery_person_id',isset($default_delivery_person)?[$default_delivery_person->id=>$default_delivery_person->user->user_name]:[],isset($default_delivery_person)?$default_delivery_person->id:null , ['class' => 'form-control select2', 'placeholder' => __('messages.please_select'),'id' => 'delivery_person_id', 'style' => 'width: 100%;' ]); !!}
+								</div>
+							</div>
+						</div>
+
+
+						<div class=" col-sm-4 @if(!empty($default_delivery_status)) hide @endif">
+							<div class="form-group">
+								{!! Form::label('delivery_status', __('delivery.delivery_status') . ':*') !!}
+								{!! Form::select('delivery_status', $deliveryStatuses , null, ['class' => 'form-control select2', 'placeholder' => __('messages.please_select'), 'required','style' => 'width: 100%;','id'=>'delivery_status']); !!}
+							</div>
+						</div>
+				</div>
+
         @if($transaction->type=='sell')
         @php
         $shipping_address=$transaction->contact->shipping_address;
@@ -34,31 +58,6 @@
         $pickup_longitude=$transaction->contact->longitude;
         @endphp
         @endif
-
-				<div class="row">
-                <input type="hidden" id="transaction_id" value="{{ $transaction->id }}" name="transaction_id">
-				<div class="col-md-12 " style="display:flex;justify-content: space-between;">
-						<div class=" col-sm-4 ">
-							<div class="form-group">
-								{!! Form::label('delivery_person_id', __('delivery.delivery_person') . ':*') !!}
-								<div class="input-group">
-						<span class="input-group-addon">
-							<i class="fa fa-user"></i>
-						</span>
-									{!! Form::select('delivery_person_id',[], null, ['class' => 'form-control select2', 'placeholder' => __('messages.please_select'),'id' => 'delivery_person_id', 'style' => 'width: 100%;' ]); !!}
-								</div>
-							</div>
-						</div>
-
-
-						<div class=" col-sm-4 @if(!empty($default_delivery_status)) hide @endif">
-							<div class="form-group">
-								{!! Form::label('delivery_status', __('delivery.delivery_status') . ':*') !!}
-								{!! Form::select('delivery_status', $deliveryStatuses , null, ['class' => 'form-control select2', 'placeholder' => __('messages.please_select'), 'required','style' => 'width: 100%;','id'=>'delivery_status']); !!}
-							</div>
-						</div>
-				</div>
-
 				<div class="col-md-12" style="display:flex;justify-content: space-between;">
                         <div class="col-sm-4">
                             <div class="form-group">

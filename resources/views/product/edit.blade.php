@@ -125,6 +125,14 @@
                 'placeholder' => __('product.alert_quantity') , 'min' => '0']); !!}
               </div>
             </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+              <br>
+                <label>
+                  {!! Form::checkbox('set_featured', 1, $product->set_featured, ['class' => 'input-icheck', 'id' => 'set_featured']); !!} <strong>@lang('product.set_featured')</strong>
+                </label> <p class="help-block"><i>@lang('product.set_featured_help')</i></p>
+              </div>
+            </div>
             @if(!empty($common_settings['enable_product_warranty']))
             <div class="col-sm-4">
               <div class="form-group">

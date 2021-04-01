@@ -450,8 +450,10 @@ class DeliveryController extends Controller
                                         'location'
                                     )
                                     ->first();
+                                 
+        $default_delivery_person=$transaction->contact->delivery_person;
          return view('delivery.assign')
-             ->with(compact('transaction', 'deliveryStatuses'));
+             ->with(compact('transaction', 'deliveryStatuses','default_delivery_person'));
         
     }
 
@@ -574,11 +576,23 @@ class DeliveryController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->can('delivery.view')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $delivery = Delivery::with(['delivery_person', 'transaction', 'record_staff'])->findorfail($id);
         $delivery_person = $this->moduleUtil->getDeliveryUser($delivery->delivery_person_id);
         return view('delivery.show', compact('delivery', 'delivery_person'));
     }
 
+    public function trackDeliveryPeople()
+    {
+        if (!auth()->user()->can('delivery.view')) {
+            abort(403, 'Unauthorized action.');
+        }
+        $delivery_people=DeliveryPerson::getAllDeliveryPerson();
+        return view('delivery.track',compact('delivery_people'));
+    }
 
 
     /**

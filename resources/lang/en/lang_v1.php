@@ -325,6 +325,7 @@ return [
    'remove_from_stock' => 'Remove from stock',
    'stock_removed_successfully' => 'Stock removed successfully',
    'product_image' => 'Product image',
+   'category_image' => 'Category Image',
    'aspect_ratio_should_be_1_1' => 'Aspect ratio should be 1:1',
    'previous_image_will_be_replaced' => 'Previously uploaded image will be replaced',
    'all_category' => 'All Categories',
@@ -1217,5 +1218,9 @@ return [
     'staff_notifications'=>'Staff Notification',
     'order_accepted'=>'Order Accepted',
     'display_order'=>'Display Order',
+    'six_months'=>'Six Months',
+    'one_month'=>'One Month',
+    'fifteen_days'=>'Fifteen Days',
+    'one_week'=>'One Week',
 
 ];

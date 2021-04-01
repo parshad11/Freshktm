@@ -174,11 +174,11 @@ class Util
             }
         }
 
-        $payment_types = ['cash' => __('lang_v1.cash'), 'card' => __('lang_v1.card'), 'cheque' => __('lang_v1.cheque'), 'bank_transfer' => __('lang_v1.bank_transfer'), 'other' => __('lang_v1.other')];
+    $payment_types = ['cash' => __('lang_v1.cash') /*, 'card' => __('lang_v1.card'), 'cheque' => __('lang_v1.cheque'), 'bank_transfer' => __('lang_v1.bank_transfer'), 'other' => __('lang_v1.other')*/];
 
-        $payment_types['custom_pay_1'] = !empty($custom_labels['payments']['custom_pay_1']) ? $custom_labels['payments']['custom_pay_1'] : __('lang_v1.custom_payment_1');
-        $payment_types['custom_pay_2'] = !empty($custom_labels['payments']['custom_pay_2']) ? $custom_labels['payments']['custom_pay_2'] : __('lang_v1.custom_payment_2');
-        $payment_types['custom_pay_3'] = !empty($custom_labels['payments']['custom_pay_3']) ? $custom_labels['payments']['custom_pay_3'] : __('lang_v1.custom_payment_3');
+        // $payment_types['custom_pay_1'] = !empty($custom_labels['payments']['custom_pay_1']) ? $custom_labels['payments']['custom_pay_1'] : __('lang_v1.custom_payment_1');
+        // $payment_types['custom_pay_2'] = !empty($custom_labels['payments']['custom_pay_2']) ? $custom_labels['payments']['custom_pay_2'] : __('lang_v1.custom_payment_2');
+        // $payment_types['custom_pay_3'] = !empty($custom_labels['payments']['custom_pay_3']) ? $custom_labels['payments']['custom_pay_3'] : __('lang_v1.custom_payment_3');
 
         //Unset payment types if not enabled in business location
         if (!empty($location)) {
@@ -1130,6 +1130,8 @@ class Util
         return $assignStatuses;
     }
 
+    
+
     public function deliveryStatuses()
     {
         $deliveryStatuses = [
@@ -1142,6 +1144,21 @@ class Util
 
         return $deliveryStatuses ;
     }
+
+    
+    public function  getCollectionDueDate()
+    {
+        $collectionDueDate = [
+            180 => __('lang_v1.six_months'),
+            30 => __('lang_v1.one_month'),
+            15 => __('lang_v1.fifteen_days'),
+            7 => __('lang_v1.one_week'),
+            
+        ];
+
+        return $collectionDueDate ;
+    }
+
 
     public function draftTypes()
     {

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use App\Contact;
 use App\CustomerGroup;
+use App\DeliveryPerson;
 use App\Unit;
 use App\User;
 use App\Utils\ModuleUtil;
@@ -37,7 +38,6 @@ class RecordController extends Controller
         $sales_representative = User::forDropdown($business_id, false, false, true);
         
         if ($request->ajax()) {
-            
             $records = $this->recordUtil->getListRecords($business_id);
             $permitted_locations = auth()->user()->permitted_locations();
             if ($permitted_locations != 'all') {
@@ -56,14 +56,14 @@ class RecordController extends Controller
             if (!empty(request()->location_id)) {
                 $records->where('records.location_id', request()->location_id);
             }
-        
-            $start_date = $request->start_date;
-            $end_date = $request->end_date;
+            
+          
             if (!empty($start_date) && !empty($end_date)) {
+                $start_date = $request->start_date;
+                $end_date = $request->end_date;
                 $records->whereBetween('expected_collection_date', [$start_date, $end_date]);
             }
-           
-     
+       
             return Datatables::of($records)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -127,8 +127,8 @@ class RecordController extends Controller
         $business_locations = $business_locations['locations'];
 
         $contact = Contact::where('type', 'supplier')->get();
-
-        return view('record.create')->with(compact('contact','units','business_locations','bl_attributes','types','customer_groups'));
+        $delivery_people = DeliveryPerson::forDropdown();
+        return view('record.create')->with(compact('contact','units','business_locations','bl_attributes','types','customer_groups','delivery_people'));
     }
 
     /**

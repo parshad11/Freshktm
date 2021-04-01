@@ -6,6 +6,7 @@ use App\Business;
 use App\BusinessLocation;
 use App\Contact;
 use App\CustomerGroup;
+use App\DeliveryPerson;
 use App\Notifications\CustomerNotification;
 use App\PurchaseLine;
 use App\Transaction;
@@ -443,13 +444,13 @@ class ContactController extends Controller
         if (auth()->user()->can('supplier.create') && auth()->user()->can('customer.create') || auth()->user()->can('supplier.view_own') || auth()->user()->can('customer.view_own')) {
             $types['both'] = __('lang_v1.both_supplier_customer');
         }
-
+     
         $customer_groups = CustomerGroup::forDropdown($business_id);
-       
+        $delivery_people = DeliveryPerson::forDropdown();
         $selected_type = request()->type;
-        
+       
         return view('contact.create')
-            ->with(compact('types', 'customer_groups', 'selected_type'));
+            ->with(compact('types', 'customer_groups', 'selected_type','delivery_people'));
     }
 
     /**
@@ -471,16 +472,19 @@ class ContactController extends Controller
             if (!$this->moduleUtil->isSubscribed($business_id)) {
                 return $this->moduleUtil->expiredResponse();
             }
-
+    
             $input = $request->only(['type', 'supplier_business_name',
-                'prefix', 'first_name', 'middle_name', 'last_name', 'tax_number', 'pay_term_number', 'pay_term_type', 'mobile', 'password', 'landline', 'alternate_number', 'city', 'state', 'country', 'address_line_1', 'address_line_2', 'customer_group_id', 'zip_code','latitude','longitude','contact_id', 'custom_field1', 'custom_field2', 'custom_field3', 'custom_field4', 'custom_field5', 'custom_field6', 'custom_field7', 'custom_field8', 'custom_field9', 'custom_field10', 'email', 'shipping_address', 'position', 'dob']);
+                'prefix', 'first_name', 'middle_name', 'last_name', 'tax_number','default_delivery_person_id', 'pay_term_number', 'pay_term_type', 'mobile', 'password', 'landline', 'alternate_number', 'city', 'state', 'country', 'address_line_1', 'address_line_2', 'customer_group_id', 'zip_code','latitude','longitude','contact_id', 'custom_field1', 'custom_field2', 'custom_field3', 'custom_field4', 'custom_field5', 'custom_field6', 'custom_field7', 'custom_field8', 'custom_field9', 'custom_field10', 'email', 'shipping_address', 'position', 'dob']);
             $input['name'] = implode(' ', [$input['prefix'], $input['first_name'], $input['middle_name'], $input['last_name']]);
 
             if (!empty($input['dob'])) {
                 $input['dob'] = $this->commonUtil->uf_date($input['dob']);
             }
-
             $input['password']=Hash::make($input['password']); 
+          
+            if($input['type']=='supplier'){
+                $input['password']=null;  
+            }
             $input['business_id'] = $business_id;
             $input['created_by'] = $request->session()->get('user.id');
 
@@ -583,9 +587,9 @@ class ContactController extends Controller
 
                 $opening_balance = $this->commonUtil->num_f($opening_balance);
             }
-
+            $delivery_people = DeliveryPerson::forDropdown();
             return view('contact.edit')
-                ->with(compact('contact', 'types', 'customer_groups', 'opening_balance'));
+                ->with(compact('contact', 'types', 'customer_groups', 'opening_balance','delivery_people'));
         }
     }
 
@@ -604,18 +608,14 @@ class ContactController extends Controller
 
         if (request()->ajax()) {
             try {
-                $input = $request->only(['type','password', 'supplier_business_name', 'prefix', 'first_name', 'middle_name', 'last_name', 'tax_number', 'pay_term_number', 'pay_term_type', 'mobile', 'address_line_1', 'address_line_2', 'zip_code','latitude','longitude', 'dob', 'alternate_number', 'city', 'state', 'country', 'landline', 'customer_group_id', 'contact_id', 'custom_field1', 'custom_field2', 'custom_field3', 'custom_field4', 'custom_field5', 'custom_field6', 'custom_field7', 'custom_field8', 'custom_field9', 'custom_field10', 'email', 'shipping_address', 'position']);
+                $input = $request->only(['type','password', 'supplier_business_name', 'prefix', 'first_name', 'middle_name', 'last_name','default_delivery_person_id','tax_number', 'pay_term_number', 'pay_term_type', 'mobile', 'address_line_1', 'address_line_2', 'zip_code','latitude','longitude', 'dob', 'alternate_number', 'city', 'state', 'country', 'landline', 'customer_group_id', 'contact_id', 'custom_field1', 'custom_field2', 'custom_field3', 'custom_field4', 'custom_field5', 'custom_field6', 'custom_field7', 'custom_field8', 'custom_field9', 'custom_field10', 'email', 'shipping_address', 'position']);
 
                 $input['name'] = implode(' ', [$input['prefix'], $input['first_name'], $input['middle_name'], $input['last_name']]);
 
                 if (!empty($input['dob'])) {
                     $input['dob'] = $this->commonUtil->uf_date($input['dob']);
                 }
-
-                if (!empty($request->input('password'))) {
-                    $input['password'] = Hash::make($request->input('password'));
-                }
-
+           
                 $input['credit_limit'] = $request->input('credit_limit') != '' ? $this->commonUtil->num_uf($request->input('credit_limit')) : null;
                 
                 $business_id = $request->session()->get('user.business_id');

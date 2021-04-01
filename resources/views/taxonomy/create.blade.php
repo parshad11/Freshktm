@@ -1,10 +1,10 @@
 <div class="modal-dialog" role="document">
   <div class="modal-content">
 
-    {!! Form::open(['url' => action('TaxonomyController@store'), 'method' => 'post', 'id' => 'category_add_form' ]) !!}
+    {!! Form::open(['url' => action('TaxonomyController@store'), 'method' => 'post', 'id' => 'category_add_form','files' => true]) !!}
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <h4 class="modal-title">@lang( 'messages.add' )</h4>
+      <h4 class="modal-title">@lang( 'product.add_category' )</h4>
     </div>
 
     <div class="modal-body">
@@ -39,12 +39,19 @@
         {!! Form::label('description', __( 'lang_v1.description' ) . ':') !!}
         {!! Form::textarea('description', null, ['class' => 'form-control', 'placeholder' => __( 'lang_v1.description'), 'rows' => 3]); !!}
       </div>
+
      
-      <div class="form-group">
-      <label>
-          {!! Form::checkbox('is_active', 'active', true, ['class' => 'input-icheck status']); !!} {{ __('lang_v1.status_for_categories') }}
-      </label>
-      </div>
+        <!-- <div class="form-group">
+          {!! Form::label('image', __('lang_v1.category_image') . ':') !!}
+          {!! Form::file('image', ['id' => 'upload_image']); !!}
+        </div> -->
+       
+        <div class="form-group">
+          <label>
+                {!! Form::checkbox('is_active', 'active', true, ['class' => 'input-icheck status']); !!} {{ __('lang_v1.status_for_categories') }}
+          </label>
+        </div>
+    
 
       @if(!empty($parent_categories) && $enable_sub_category)
         <div class="form-group">

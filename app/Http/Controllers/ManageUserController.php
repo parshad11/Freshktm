@@ -489,9 +489,13 @@ class ManageUserController extends Controller
             try {
                 $business_id = request()->session()->get('user.business_id');
                 
+                $deliveryPeople=DeliveryPerson::where('user_id',$id)->first();
+                
                 User::where('business_id', $business_id)
                     ->where('id', $id)->delete();
-
+                 if($deliveryPeople){
+                        $deliveryPeople->delete();
+                    }
                 $output = ['success' => true,
                                 'msg' => __("user.user_delete_success")
                                 ];

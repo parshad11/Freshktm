@@ -424,6 +424,7 @@ class ProductController extends Controller
             $product_details['created_by'] = $request->session()->get('user.id');
 
             $product_details['enable_stock'] = (!empty($request->input('enable_stock')) &&  $request->input('enable_stock') == 1) ? 1 : 0;
+            $product_details['set_featured'] = (!empty($request->input('set_featured')) &&  $request->input('set_featured') == 1) ? 1 : 0;
             $product_details['not_for_selling'] = (!empty($request->input('not_for_selling')) &&  $request->input('not_for_selling') == 1) ? 1 : 0;
 
             if (!empty($request->input('sub_category_id'))) {
@@ -670,6 +671,12 @@ class ProductController extends Controller
                 $product->enable_stock = 1;
             } else {
                 $product->enable_stock = 0;
+            }
+
+            if (!empty($request->input('set_featured')) &&  $request->input('set_featured') == 1) {
+                $product->set_featured = 1;
+            } else {
+                $product->set_featured = 0;
             }
 
             $product->not_for_selling = (!empty($request->input('not_for_selling')) &&  $request->input('not_for_selling') == 1) ? 1 : 0;

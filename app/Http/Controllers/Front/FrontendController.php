@@ -15,6 +15,7 @@ use App\Front\Testimonial;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Mail\VendorRequestMail;
+use Exception;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
 
@@ -70,7 +71,14 @@ class FrontendController extends Controller
 
     public function mailRequest(Request $request)
     {
-        Mail::to(Config::get('mail.from.address'))->send(new VendorRequestMail($request));
+        try{
+            Mail::to(Config::get('mail.from.address'))->send(new VendorRequestMail($request));
+            $request->session()->flash('sucess', 'Your message has been sent to Freshktm');
+
+        } catch (Exception $ex) {
+            $request->session()->flash('error', 'Something went wrong');
+        }
+
         return redirect()->back();
     }
 

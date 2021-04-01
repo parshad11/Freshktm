@@ -216,10 +216,11 @@ class HomeController extends Controller
             }
         }
 
+        $collectionDueDate=$this->transactionUtil->getCollectionDueDate();
         if ($request->ajax()) {
             $today = Carbon::now();
             $dateStartOfYear = $today->copy()->startOfYear();
-            $dateOfSixMonths = $dateStartOfYear->addMonth(6);
+            $dateOfSixMonths = $today->copy()->startOfYear()->addMonth(6);
             $dateOfEndOfYear = $today->copy()->endOfYear();
            
             if($today->between($dateStartOfYear,$dateOfSixMonths)){
@@ -228,8 +229,6 @@ class HomeController extends Controller
             else {
                 $endPeriod=$dateOfEndOfYear;
             }
-      
-
             if (auth()->user()->can('record.view') && auth()->user()->can('record.view_own')) {
                 $records = $this->recordUtil->getListRecords($business_id)->whereBetween('expected_collection_date', [$today, $endPeriod]);
             } 
@@ -237,11 +236,20 @@ class HomeController extends Controller
                 $records = $this->recordUtil->getListRecords($business_id)->whereBetween('expected_collection_date', [$today, $endPeriod])
                     ->where('records.created_by', auth()->user()->id);
             }
-            $permitted_locations = auth()->user()->permitted_locations();
-            if ($permitted_locations != 'all') {
-                $records->whereIn('records.location_id', $permitted_locations);
+          
+            if(!empty(request()->collection_due_date)){
+                $collection_due_date = request()->get('collection_due_date');
+                $endPeriod=Carbon::now()->addDays($collection_due_date);
+                if (auth()->user()->can('record.view') && auth()->user()->can('record.view_own')) {
+                    $records = $this->recordUtil->getListRecords($business_id) ->whereBetween('expected_collection_date', [$today, $endPeriod]);
+                } 
+                elseif (!auth()->user()->can('record.view') && auth()->user()->can('record.view_own')) {
+                    $records = $this->recordUtil->getListRecords($business_id) ->whereBetween('expected_collection_date', [$today, $endPeriod])
+                        ->where('records.created_by', auth()->user()->id);
+                }
+                
             }
-
+  
             return Datatables::of($records)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -265,12 +273,17 @@ class HomeController extends Controller
                     $html .= '</ul></div>';
                     return $html;
                 })
+                ->addColumn('due_days', function ($row) {
+                    $dueDate=Carbon::parse($row->expected_collection_date);
+                    $remaningDays=$dueDate->diff(Carbon::now())->days;
+                    return $remaningDays.' Days';
+                  })
                 ->removeColumn('id')
-                ->rawColumns(['action'])
+                ->rawColumns(['action','due_days'])
                 ->make(true);
         }
 
-        return view('home.index', compact('date_filters', 'sells_chart_1', 'sells_chart_2', 'widgets', 'all_locations'));
+        return view('home.index', compact('date_filters', 'sells_chart_1', 'sells_chart_2', 'widgets', 'all_locations','collectionDueDate'));
     }
 
     /**

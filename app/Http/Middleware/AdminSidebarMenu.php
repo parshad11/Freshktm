@@ -290,13 +290,13 @@ class AdminSidebarMenu
                             );
                         }
 
-                        if (auth()->user()->can('access_shipping')) {
-                            $sub->url(
-                                action('SellController@shipments'),
-                                __('lang_v1.shipments'),
-                                ['icon' => 'fa fas fa-truck', 'active' => request()->segment(1) == 'shipments']
-                            );
-                        }
+                        // if (auth()->user()->can('access_shipping')) {
+                        //     $sub->url(
+                        //         action('SellController@shipments'),
+                        //         __('lang_v1.shipments'),
+                        //         ['icon' => 'fa fas fa-truck', 'active' => request()->segment(1) == 'shipments']
+                        //     );
+                        // }
 
                         if (auth()->user()->can('discount.access')) {
                             $sub->url(
@@ -330,6 +330,13 @@ class AdminSidebarMenu
                 $menu->dropdown(
                     __('delivery.delivery'),
                     function ($sub) {
+                        if (auth()->user()->can('task.view') || auth()->user()->can('delivery.view')) {
+                            $sub->url(
+                                action('DeliveryController@trackDeliveryPeople'),
+                                __('delivery.track_delivery_people'),
+	                                ['icon' => 'fa fas fa-list', 'active' => request()->segment(1) == 'track' && request()->segment(2) == 'all-delivery-people' ]
+                            );
+                        }
                         if (auth()->user()->can('delivery.assign')) {
                             $sub->url(
                                 action('DeliveryController@listDeliveryTransaction'),

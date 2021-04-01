@@ -105,6 +105,8 @@ class User extends Authenticatable
         return $user;
     }
 
+  
+
     public function getUserNameAttribute()
     {
         return $this->surname . ' ' . $this->first_name . ' '. $this->last_name;

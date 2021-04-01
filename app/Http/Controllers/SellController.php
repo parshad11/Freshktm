@@ -8,6 +8,7 @@ use App\BusinessLocation;
 use App\Contact;
 use App\CustomerGroup;
 use App\Delivery;
+use App\DeliveryPerson;
 use App\InvoiceScheme;
 use App\SellingPriceGroup;
 use App\TaxRate;
@@ -519,6 +520,7 @@ class SellController extends Controller
         }
 
         $status = request()->get('status', '');
+        $delivery_people = DeliveryPerson::forDropdown();
 
         return view('sell.create')
             ->with(compact(
@@ -542,7 +544,8 @@ class SellController extends Controller
                 'types_of_service',
                 'accounts',
                 'shipping_statuses',
-                'status'
+                'status',
+                'delivery_people'
             ));
     }
 
@@ -866,9 +869,9 @@ class SellController extends Controller
         $common_settings = session()->get('business.common_settings');
         $is_warranty_enabled = !empty($common_settings['enable_product_warranty']) ? true : false;
         $warranties = $is_warranty_enabled ? Warranty::forDropdown($business_id) : [];
-        
+        $delivery_people = DeliveryPerson::forDropdown();
         return view('sell.edit')
-            ->with(compact('business_details','delivery', 'taxes', 'sell_details', 'transaction', 'commission_agent', 'types', 'customer_groups', 'pos_settings', 'waiters', 'invoice_schemes', 'default_invoice_schemes', 'redeem_details', 'edit_discount', 'edit_price', 'accounts', 'shipping_statuses', 'warranties'));
+            ->with(compact('business_details','delivery', 'taxes', 'sell_details','delivery_people' ,'transaction', 'commission_agent', 'types', 'customer_groups', 'pos_settings', 'waiters', 'invoice_schemes', 'default_invoice_schemes', 'redeem_details', 'edit_discount', 'edit_price', 'accounts', 'shipping_statuses', 'warranties'));
     }
 
     /**

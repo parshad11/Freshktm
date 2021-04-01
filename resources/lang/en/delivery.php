@@ -75,5 +75,7 @@ return [
     'location_details'=>'Location Details',
     'business_location'=>'Business Location',
     'added_by'=>'Added By',
+    'default_delivery_person'=>'Default Delivery Person',
+    'track_delivery_people'=>'Track Delivery People',
 
 ];

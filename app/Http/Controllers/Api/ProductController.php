@@ -29,6 +29,7 @@ class ProductController extends Controller
 					->leftJoin('categories as sc','products.sub_category_id','=','sc.id')
 					->leftJoin('media as m','m.model_id','=','v.id')
 					->whereIn('v.id', $variation_location_variation_ids)
+					->where('c.status','active')
 					->select(
 						'products.id',
 						'products.name',
@@ -48,26 +49,31 @@ class ProductController extends Controller
 						'sc.parent_id',
 						DB::raw("CONCAT('$path','/',m.file_name) as product_image")
 					)
-					->get();
-						
+					->orderBy('set_featured','DESC')->orderBy('id','DESC')
+					->paginate();
+			$items=[];
+			$items=$products;
+			$products=collect([$items]);			
 		return response()->json([
 			'product' => $products,
 		]);
 	}
 
 	public function categories(){
-		$special_cat = Category::with('sub_categories')->where('name', 'like', '%special%')->where('parent_id', 0)->first();
-        if ($special_cat == null) {
-            $all_categories = Category::with('sub_categories')->where('parent_id', 0)->get();
+		$special_categories = Category::with(['sub_categories','products'])->where('name', 'like', '%special%')->where('parent_id', 0)->first();
+        if ($special_categories == null) {
+            $all_categories = Category::with(['sub_categories','products'])->where('parent_id', 0)->active()->orderBy('display_order')->get();
         } else {
-            $all_categories = Category::with('sub_categories')->where('parent_id', 0)->where('id', '!=', $special_cat->id)->get();
+            $all_categories = Category::with(['sub_categories','products'])->where('parent_id', 0)->where('id', '!=', $special_categories->id)->active()->orderBy('display_order')->get();
         }
 		
 		return response()->json([
 			'categories' => $all_categories,
-			'special_category'=>$special_cat
+			'special_category'=>$special_categories
 		]);
 	}
+
+	
 
 	public function product($slug)
 	{
@@ -116,13 +122,50 @@ class ProductController extends Controller
 
 	public function search(Request $request){
 		$path=asset('/uploads/media/');
+		$term = $request->get('query');
+		$location = BusinessLocation::where('location_id', 'BL0001')->first();
+		$variation_location_product_ids = VariationLocationDetails::with('location')->where('location_id', $location->id)->pluck('variation_id')->toArray();
+		$products = Product::leftJoin('variations', 'products.id', '=', 'variations.product_id')
+		->leftJoin('media as m','m.model_id','=','variations.id')
+		->whereIn('products.id', $variation_location_product_ids)
+		->where(function ($query) use ($term) {
+			$query->where('products.name', 'like', '%' . $term . '%');
+			$query->orWhere('products.sku', 'like', '%' . $term . '%');
+		})
+		->select(
+			'products.name as name',
+			'variations.name as variation_name',
+			'products.product_description',
+			'variations.market_price',
+			'variations.id as variation_id',
+			'variations.sub_sku as sub_sku',
+			'variations.default_sell_price as unit_price',
+			'variations.sell_price_inc_tax as unit_price_with_tax',
+			DB::raw("CONCAT('$path','/',m.file_name) as product_image")
+		)
+		->get();
+		if(count($products)>0){
+		return response()->json([
+			'product' => $products,
+		]);
+		}
+		else{
+			return response()->json([
+				'message' => 'No Product Found',
+			]);
+		}
+	}
+
+	public function searchByCategory($id){
+		$path=asset('/uploads/media/');
 		$location = BusinessLocation::where('location_id', 'BL0001')->first();
 		$variation_location_variation_ids = VariationLocationDetails::with('location')->where('location_id', $location->id)->pluck('variation_id')->toArray();
 		$products = Product::leftJoin('variations as v','products.id','=','v.product_id')
 			->leftJoin('categories as c','products.category_id','=','c.id')
 			->leftJoin('categories as sc','products.sub_category_id','=','sc.id')
 			->leftJoin('media as m','m.model_id','=','v.id')
-			->where('products.name', 'like', '%' . $request->get('query') . '%')
+			->where('products.category_id', $id)
+			->orwhere('products.sub_category_id',$id)
 			->whereIn('v.id', $variation_location_variation_ids)
 			->select(
 				'products.id',
@@ -145,9 +188,9 @@ class ProductController extends Controller
 			)
 			->get();
 		if(count($products)>0){
-		return response()->json([
-			'product' => $products,
-		]);
+			return response()->json([
+				'product' => $products,
+			]);
 		}
 		else{
 			return response()->json([

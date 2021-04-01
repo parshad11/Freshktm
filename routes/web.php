@@ -145,6 +145,7 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
 
     Route::resource('delivery', 'DeliveryController')->except(['create']);
     Route::get('delivery/{transactionId}/create/', 'DeliveryController@create');
+    Route::get('track/all-delivery-people/', 'DeliveryController@trackDeliveryPeople');
     Route::get('/delivery-transaction', 'DeliveryController@listDeliveryTransaction')->name('delivery.transactions');
     Route::resource('task', 'TaskController');
     Route::put('/task/statusupdate/{id}', 'TaskController@statusupdate');

@@ -160,10 +160,16 @@
           	</div>
         @endif
         @if(!empty($all_locations))
-            <div class="row">
+                <div class="row">
                 <div class="col-sm-12">
-                    @component('components.widget', ['class' => 'box-primary', 'title' => __('Supplier Records For Current 6 Months')])
+                    @component('components.widget', ['class' => 'box-primary', 'title' => __('All Supplier Records For Current Harvest Period')])
                         @if (auth()->user()->can('record.view') || auth()->user()->can('record.view_own'))
+                        <div class="row" style="margin-bottom: 10px;">
+                        <div class="col-md-4 col-sm-12">
+                        {!! Form::label('date', __('product.collection_due_date') . ':') !!}
+                        {!! Form::select('filter_collection_due_date',$collectionDueDate, null, ['class' => 'form-control select2', 'id' => 'filter_collection_due_date', 'placeholder' => __('lang_v1.all')]); !!}
+                        </div>
+                        </div>
                             <table class="table table-bordered table-striped" id="record_table">
                                 <thead>
                                 <tr>
@@ -173,6 +179,7 @@
                                     <th>Quantity</th>
                                     <th>Unit</th>
                                     <th>Expected Collection Date</th>
+                                    <th>Due Days</th>
                                     <th>Supplier Location</th>
                                     <th>@lang('lang_v1.added_by')</th>
                                 </tr>
@@ -296,12 +303,14 @@
     @endif
 
     <script type="text/javascript">
+    $(document).ready( function(){
         record_table = $('#record_table').DataTable({
             processing: true,
             serverSide: true,
             "ajax": {
                 "url": "/home",
                 "data": function (d) {
+                  d.collection_due_date = $('#filter_collection_due_date').val();
                 }
             },
             columns: [
@@ -311,6 +320,7 @@
                 {data: 'quantity', name: 'quantity'},
                 {data: 'unit', name: 'units.actual_name',orderable: false},
                 {data: 'expected_collection_date', name: 'expected_collection_date'},
+                {data: 'due_days', name: 'due_days'},
                 {data: 'location', name: 'location'},
                 {data: 'added_by', name: 'u.first_name'},
             ],
@@ -318,6 +328,10 @@
                 __currency_convert_recursively($('#record_table'));
             }
         });
+        $(document).on('change', '#filter_collection_due_date',  function() {
+        record_table.ajax.reload();
+    });
+  });
     </script>
 @endsection
 

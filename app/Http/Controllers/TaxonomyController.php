@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Utils\ModuleUtil;
+use App\Utils\ProductUtil;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
@@ -15,16 +16,17 @@ class TaxonomyController extends Controller
      *
      */
     protected $moduleUtil;
-
+    protected $productUtil;
     /**
      * Constructor
      *
      * @param ProductUtils $product
      * @return void
      */
-    public function __construct(ModuleUtil $moduleUtil)
+    public function __construct(ProductUtil $productUtil,ModuleUtil $moduleUtil)
     {
         $this->moduleUtil = $moduleUtil;
+        $this->productUtil = $productUtil;
     }
 
     /**
@@ -126,6 +128,7 @@ class TaxonomyController extends Controller
             } else {
                 $input['parent_id'] = 0;
             }
+            $input['image'] = $this->productUtil->uploadFile($request, 'image', config('constants.product_img_path'), 'image');
             $input['status'] = !empty($request->input('is_active')) ? 'active' : 'inactive';
             $input['slug'] = Str::slug($request->name);
             $input['business_id'] = $request->session()->get('user.business_id');
@@ -261,6 +264,8 @@ class TaxonomyController extends Controller
                 $business_id = request()->session()->get('user.business_id');
 
                 $category = Category::where('business_id', $business_id)->findOrFail($id);
+                $category->status='inactive';
+                $category->save();
                 $category->delete();
 
                 $output = ['success' => true,
