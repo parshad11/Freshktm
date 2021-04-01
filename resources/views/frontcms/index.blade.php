@@ -684,11 +684,10 @@
         <script>
             $(document).ready(function () {
                 Swal.fire({
-                    position: 'top-end',
                     icon: 'success',
-                    title: 'Order Added Successfully',
+                    title: "{{Session::get('success')}}",
                     showConfirmButton: false,
-                    timer: 5000
+                    timer: 3000
                 })
             })
         </script>
@@ -697,7 +696,6 @@
         <script>
             $(document).ready(function () {
                 Swal.fire({
-                    position: 'top-end',
                     icon: 'error',
                     title: "{{Session::get('error')}}",
                     showConfirmButton: false,

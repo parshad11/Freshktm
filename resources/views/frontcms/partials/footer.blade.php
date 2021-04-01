@@ -61,6 +61,14 @@
                             </div>
                         </form>
                     </div>
+                    <div class="incubated_by" style="padding: 15px;">
+                        <div class="row">
+                        <h4 class="col-sm-6" style="color: aliceblue;">Incubated By :</h4>
+                        <div class="incubated_img col-sm-6">
+                            <img class="img img-responsive" src="{{ asset('cms/images/incubated_by.jpg') }}" alt="">
+                        </div>
+                    </div>
+                    </div>
                 </div>
             </div>
             <div class="col-md-4">
