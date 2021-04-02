@@ -476,5 +476,13 @@ Route::namespace('Front')->middleware(['setData', 'auth', 'SetSessionData', 'lan
     Route::get('/frontcms/ecom/file/{id}/edit', 'CmsController@editFile')->name('ecom_file_edit');
     Route::put('/frontcms/ecom/file/{id}', 'CmsController@updateFile')->name('ecom_file_update');
     Route::delete('/frontcms/ecom/file/{id}/destroy', 'CmsController@deleteFile')->name('ecom_file_delete');
+
+    //Counter Section 
+    Route::get('/frontcms/counter-data', 'CmsController@viewCounterData')->name('counter.index');
+    Route::get('/frontcms/counter-data/create', 'CmsController@createCounterForm')->name('counter.form');
+    Route::post('/frontcms/counter-data', 'CmsController@storeCounterData')->name('counter.store');
+    Route::get('/frontcms/counter-data/{id}/edit', 'CmsController@editCounterData')->name('counter.edit');
+    Route::put('/frontcms/counter-data/{id}', 'CmsController@updateCounterData')->name('counter.update');
+    Route::delete('/frontcms/counter-data/{id}/destroy', 'CmsController@deleteCounterData')->name('counter.delete');
 });
 

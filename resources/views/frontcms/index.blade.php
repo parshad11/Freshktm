@@ -451,7 +451,7 @@
                 <div class="col-md-3 col-sm-6 col-xs-6 fw600">
                     <div class="counter">
                         <div class="counter-content">
-                            <span class="count">0</span>
+                            <span class="count">{{isset($counter_info) ? $counter_info->farmers : 0}}</span>
                         </div>
                         <h3 class="title">Happy Farmers</h3>
                     </div>
@@ -459,7 +459,7 @@
                 <div class="col-md-3 col-sm-6 col-xs-6 fw600">
                     <div class="counter">
                         <div class="counter-content">
-                            <span class="count">0</span>
+                            <span class="count">{{isset($counter_info) ? $counter_info->clients : 0}}</span>
                         </div>
                         <h3 class="title">Happy Clients</h3>
                     </div>
@@ -467,7 +467,7 @@
                 <div class="col-md-3 col-sm-6 col-xs-6 fw600">
                     <div class="counter">
                         <div class="counter-content">
-                            <span class="count">0</span>
+                            <span class="count">{{isset($counter_info) ? $counter_info->staffs : 0}}</span>
                         </div>
                         <h3 class="title">our staff</h3>
                     </div>
@@ -475,7 +475,7 @@
                 <div class="col-md-3 col-sm-6 col-xs-6 fw600">
                     <div class="counter">
                         <div class="counter-content">
-                            <span class="count">0</span>
+                            <span class="count">{{isset($counter_info) ? $counter_info->awards : 0}}</span>
                         </div>
                         <h3 class="title">Win Awards</h3>
                     </div>
