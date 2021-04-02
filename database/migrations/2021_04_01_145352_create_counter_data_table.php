@@ -15,8 +15,10 @@ class CreateCounterDataTable extends Migration
     {
         Schema::create('counter_data', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('type');
-            $table->integer('value');
+            $table->integer('farmers')->nullable();
+            $table->integer('clients')->nullable();
+            $table->integer('staffs')->nullable();
+            $table->integer('awards')->nullable();
             $table->timestamps();
         });
     }
