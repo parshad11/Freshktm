@@ -13,6 +13,10 @@
           <br>
           <div class="row">
          <div class="col-md-12">
+         @foreach ($delivery_people as $key => $delivery_person)
+         <input type="hidden" id="location[$key]" value="{{ $delivery_person }}" name="location">
+         @endforeach
+        
             <div id='map' style="min-height:80vh;width:100%">
 
             </div>
@@ -21,14 +25,10 @@
      </section>
 @endsection
 @section('javascript')
-     <!-- document & note.js -->
-     @include('documents_and_notes.document_and_note_js')
 
      <script type="text/javascript">
          $(document).ready(function () {
-            
-         
-
+        
          mapboxgl.accessToken = 'pk.eyJ1IjoicHJhbW9kbGFtc2FsIiwiYSI6ImNqenp2d25xZjIyZnozbG1saXJvdzY4encifQ.JnhenWIopEkt6RAp5ukfCA';
          var map = new mapboxgl.Map({
           container: 'map',

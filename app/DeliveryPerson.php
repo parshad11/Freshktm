@@ -38,11 +38,11 @@ class DeliveryPerson extends Model
         $deliveryPeople = DeliveryPerson::leftJoin('users as u','delivery_people.user_id','=','u.id')
                         ->select(
                             DB::raw("CONCAT(COALESCE(u.surname, ''),' ',COALESCE(u.first_name, ''),' ',COALESCE(u.last_name,'')) as delivery_person"),
-                            'delivery_people.latitude',
-                            'delivery_people.longitude',
+                            DB::raw("CONCAT(COALESCE(latitude, ''),' ',COALESCE(longitude, '')) as location"),
+
                         )
                         ->get();
-        $deliveryPeople=Arr::pluck($deliveryPeople,'latitude','delivery_person');
+        $deliveryPeople=Arr::pluck($deliveryPeople,'location','delivery_person');
         return $deliveryPeople;
     }
 
