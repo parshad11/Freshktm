@@ -591,7 +591,6 @@ class DeliveryController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $delivery_people=DeliveryPerson::getAllDeliveryPeople();
-        dd($delivery_people);
         return view('delivery.track',compact('delivery_people'));
     }
 
