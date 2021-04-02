@@ -50,7 +50,7 @@ class ProductController extends Controller
 						DB::raw("CONCAT('$path','/',m.file_name) as product_image")
 					)
 					->orderBy('set_featured','DESC')->orderBy('id','DESC')
-					->paginate();
+					->paginate(14);
 			$items=[];
 			$items=$products;
 			$products=collect([$items]);			
@@ -60,11 +60,13 @@ class ProductController extends Controller
 	}
 
 	public function categories(){
-		$special_categories = Category::with(['sub_categories','products'])->where('name', 'like', '%special%')->where('parent_id', 0)->first();
+		$special_categories = Category::with(['sub_categories','products.variations'])->where('name', 'like', '%special%')->where('parent_id', 0)->first();
         if ($special_categories == null) {
-            $all_categories = Category::with(['sub_categories','products'])->where('parent_id', 0)->active()->orderBy('display_order')->get();
+            $all_categories = Category::
+										with(['sub_categories','products.variations'])
+										->where('parent_id', 0)->active()->orderBy('display_order')->get();
         } else {
-            $all_categories = Category::with(['sub_categories','products'])->where('parent_id', 0)->where('id', '!=', $special_categories->id)->active()->orderBy('display_order')->get();
+            $all_categories = Category::with(['sub_categories','products.variations'])->where('parent_id', 0)->where('id', '!=', $special_categories->id)->active()->orderBy('display_order')->get();
         }
 		
 		return response()->json([
