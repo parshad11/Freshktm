@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use App\Front\Blog;
 use App\Front\BlogCategory;
 use App\Front\Career;
+use App\Front\CounterData;
 use App\Front\Document;
 use App\Front\Faq;
 use App\Front\FrontAbout;
@@ -17,6 +18,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Utils\Util;
 use Illuminate\Support\Str;
+use PHPUnit\Framework\Constraint\Count;
 
 use function GuzzleHttp\json_decode;
 use function GuzzleHttp\json_encode;
@@ -953,6 +955,51 @@ class CmsController extends Controller
                 'msg' => 'File deleted Successfuly'
             ];
             return redirect()->route('ecom_file')->with('status', $output);
+        }
+    }
+
+    public function viewCounterData(){
+        $data = CounterData::firstOrFail();
+        if(!$data){
+            return redirect()->route('counter.form');
+        }
+        return view('frontcms.counter.edit')->with('counter_info', $data);
+    }
+    public function createCounterForm(){
+        return view('frontcms.counter.form');
+    }
+    public function storeCounterData(Request $request){
+        $counter = new CounterData();
+        $counter->farmers = $request->farmers;
+        $counter->clients = $request->clients;
+        $counter->awards = $request->awards;
+        $counter->staffs = $request->staffs;
+        $status = $counter->save();
+        if ($status) {
+            $output = [
+                'success' => 1,
+                'msg' => 'Data Added Successfuly'
+            ];
+            return redirect()->route('counter.index')->with('status', $output);
+        }
+    }
+    public function editCounterData($id){
+        $data = CounterData::first();
+        return view('frontcms.counter.edit')->with('counter_info', $data);
+    }
+    public function updateCounterData($id, Request $request){
+        $counter = CounterData::findOrFail($id);
+        $counter->farmers = $request->farmers;
+        $counter->clients = $request->clients;
+        $counter->awards = $request->awards;
+        $counter->staffs = $request->staffs;
+        $status = $counter->save();
+        if ($status) {
+            $output = [
+                'success' => 1,
+                'msg' => 'Data Updated Successfuly'
+            ];
+            return redirect()->route('counter.index')->with('status', $output);
         }
     }
 }

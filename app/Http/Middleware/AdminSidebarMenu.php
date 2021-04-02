@@ -727,6 +727,11 @@ class AdminSidebarMenu
                             'File Setting',
                             ['icon' => 'fa fas fa-list', 'active' => request()->segment(1) == 'frontcms' && request()->segment(2) == 'ecom']
                         );
+                        $sub->url(
+                            route('counter.form'),
+                            'Counter Data',
+                            ['icon' => 'fa fas fa-list', 'active' => request()->segment(1) == 'frontcms' && request()->segment(2) == 'counter-data']
+                        );
                     },
                     ['icon' => 'fa fas fa-house-damage', 'id' => 'tour_step6']
                 )->order(90);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use App\Front\Blog;
 use App\Front\BlogCategory;
 use App\Front\Career;
+use App\Front\CounterData;
 use App\Front\Faq;
 use App\Front\FrontAbout;
 use App\Front\HomeSetting;
@@ -35,6 +36,7 @@ class FrontendController extends Controller
         $service = Service::where('status', 'active')->get();
         $blogs = Blog::where('status', 'active')->take(4)->latest()->get();
         $testimonials = Testimonial::where('status', 'active')->get();
+        $counter_info = CounterData::first();
         /*dd($testimonials);
         $home_setting = json_decode($home_settings->why_choose_us, true);
         dd($home_setting['Agriculture Leader']);
@@ -47,7 +49,8 @@ class FrontendController extends Controller
             ->with('team_members', $teams)
             ->with('services', $service)
             ->with('blogs', $blogs)
-            ->with('testimonials', $testimonials);
+            ->with('testimonials', $testimonials)
+            ->with('counter_info', $counter_info);
     }
 
     public function getAbout()

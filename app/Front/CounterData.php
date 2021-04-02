@@ -14,4 +14,6 @@ class CounterData extends Model
      * @var array
      */
     protected $guarded = ['id'];
+
+    protected $fillable = ['farmers', 'clients', 'staffs', 'awards'];
 }
