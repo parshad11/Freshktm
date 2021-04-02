@@ -64,11 +64,18 @@ class AdminSidebarMenu
                     function ($sub) {
                         if (auth()->user()->can('supplier.view')) {
                             $sub->url(
-                                action('ContactController@index', ['type' => 'supplier']),
-                                __('report.supplier'),
-                                ['icon' => 'fa fas fa-star', 'active' => request()->input('type') == 'supplier']
+                                action('ContactController@TrackSupplier'),
+                                __('Track Supplier'),
+                                ['icon' => 'fa fas fa-star', 'active' => request()->segment(1) == 'track']
                             );
                         }
+	                    if (auth()->user()->can('supplier.view')) {
+		                    $sub->url(
+			                    action('ContactController@index', ['type' => 'supplier']),
+			                    __('report.supplier'),
+			                    ['icon' => 'fa fas fa-star', 'active' => request()->input('type') == 'supplier']
+		                    );
+	                    }
                         if (auth()->user()->can('record.view') || auth()->user()->can('record.view_own')) {
                             $sub->url(
                                 action('RecordController@index'),

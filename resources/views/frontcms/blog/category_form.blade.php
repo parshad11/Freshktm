@@ -1,6 +1,5 @@
-<div class="modal-dialog modal-md" role="document">
+<div class="modal-dialog modal-md" role="document" id="categoryModal">
     <div class="modal-content">
-
         <form action="{{route('cms_blogcat')}}">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
