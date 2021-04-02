@@ -1347,4 +1347,14 @@ class ContactController extends Controller
                     ->with(compact('payments', 'payment_types'));
         }
     }
+
+    public function TrackSupplier(Request $request){
+//		dd(request()->segment(1));
+	    if (!auth()->user()->can('supplier.view')) {
+		    abort(403, 'Unauthorized action.');
+	    }
+	    $supplier=Contact::where('type','supplier')->get();
+	    return view('contact.track',compact('supplier'));
+
+    }
 }

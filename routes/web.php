@@ -76,6 +76,7 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
 
     /*supplier detail*/
     Route::resource('records', 'RecordController');
+	Route::get('track/all-supplier/', 'ContactController@TrackSupplier');
     route::get('/supplier/detail', 'RecordController@getallsupplier');
     Route::get('/record/view/{id}', 'RecordController@view');
 
