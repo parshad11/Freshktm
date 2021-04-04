@@ -76,6 +76,7 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
 
     /*supplier detail*/
     Route::resource('records', 'RecordController');
+	Route::get('track/all-supplier/', 'ContactController@TrackSupplier');
     route::get('/supplier/detail', 'RecordController@getallsupplier');
     Route::get('/record/view/{id}', 'RecordController@view');
 
@@ -146,6 +147,7 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
     Route::resource('delivery', 'DeliveryController')->except(['create']);
     Route::get('delivery/{transactionId}/create/', 'DeliveryController@create');
     Route::get('track/all-delivery-people/', 'DeliveryController@trackDeliveryPeople');
+    Route::get('track/live/track/all-delivery-people/', 'DeliveryController@livetrackDeliveryPeople');
     Route::get('/delivery-transaction', 'DeliveryController@listDeliveryTransaction')->name('delivery.transactions');
     Route::resource('task', 'TaskController');
     Route::put('/task/statusupdate/{id}', 'TaskController@statusupdate');
