@@ -16,6 +16,7 @@ return [
     'contact' => 'Contact',
     'manage_your_contact' => 'Manage your :contacts',
     'all_your_contact' => 'All your :contacts',
+    'all_suppliers' => 'All your suppliers',
     'add_contact' => 'Add a new contact',
     'add_supplier' => 'Add a new supplier',
     'contact_type' => 'Contact type',

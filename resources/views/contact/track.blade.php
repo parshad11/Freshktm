@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __( 'delivery.track_delivery_people' ))
+@section('title', __( 'contact.all_suppliers' ))
 
 @section('content')
 
@@ -8,7 +8,7 @@
      <section class="content">
           <div class="row">
                <div class="col-md-4">
-                    <h3>@lang( 'delivery.track_delivery_people' )</h3>
+                    <h3>@lang( 'contact.all_suppliers' )</h3>
                </div>
           </div>
           <br>

@@ -97,7 +97,11 @@ class Category extends Model
     }
 
     public function products(){
-        return $this->hasMany(\App\Product::class);
+        return $this->hasMany(\App\Product::class,'category_id');
+    }
+
+    public function sub_category_products(){
+        return $this->hasMany(\App\Product::class,'sub_category_id');
     }
 
     public function scopeActive($query)
