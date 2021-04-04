@@ -2,7 +2,7 @@
 @section('title', __('lang_v1.login'))
 
 @section('content')
-    <div class="login-form col-md-12 col-xs-12 right-col-content">
+    <div class="login-form col-md-8 col-md-offset-2 col-xs-12 right-col-content">
         <p class="form-header text-white">@lang('lang_v1.login')</p>
         <form method="POST" action="{{ route('login') }}" id="login-form">
             {{ csrf_field() }}
