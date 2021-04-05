@@ -699,7 +699,7 @@
                     icon: 'error',
                     title: "{{Session::get('error')}}",
                     showConfirmButton: false,
-                    timer: 4000
+                    timer: 3000
                 })
             })
         </script>
