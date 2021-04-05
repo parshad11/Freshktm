@@ -31,7 +31,7 @@
                  container: 'map',
                  style: 'mapbox://styles/mapbox/outdoors-v11',
                  center: [85.43957176317652, 27.659904811332666],
-                 zoom: 11
+                 zoom: 12
              });
 
              map.on('load', function () {
@@ -47,9 +47,8 @@
                              'data': {
                                  'type': 'FeatureCollection',
                                  'features': [
-                                           @foreach($supplier as $key => $supplier)
+                                           @foreach($supplier as $supplier)
                                      {
-
                                          // feature for Mapbox DC
                                          'type': 'Feature',
                                          'geometry': {
