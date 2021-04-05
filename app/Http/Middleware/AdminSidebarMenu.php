@@ -66,7 +66,7 @@ class AdminSidebarMenu
                             $sub->url(
                                 action('ContactController@TrackSupplier'),
                                 __('Track Supplier'),
-                                ['icon' => 'fa fas fa-star', 'active' => request()->segment(1) == 'track']
+                                ['icon' => 'fa fas fa-star', 'active' => request()->segment(1) == 'track' && request()->segment(2) == 'all-supplier']
                             );
                         }
 	                    if (auth()->user()->can('supplier.view')) {
