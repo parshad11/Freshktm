@@ -61,11 +61,10 @@ class DeliveryController extends Controller
             ->where('deliveries.id', $id)
             ->select(
                 'deliveries.id',
-                'deliveries.name',
                 'deliveries.delivery_status',
                 'deliveries.shipping_address',
                 'deliveries.shipping_latitude',
-                'deliveries.shipping_latitude',
+                'deliveries.shipping_longitude',
                 'deliveries.pickup_address',
                 'deliveries.pickup_latitude',
                 'deliveries.pickup_longitude',
@@ -73,7 +72,8 @@ class DeliveryController extends Controller
                 'deliveries.delivered_to',
                 't.type',
                 't.final_total',
-                't.id as transaction_id'
+                't.id as transaction_id',
+                't.payment_status'
             )
             ->first();
         $total_paid = TransactionPayment::where('transaction_id', $delivery->transaction->id)
