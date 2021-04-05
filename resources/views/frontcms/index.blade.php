@@ -687,7 +687,7 @@
                     icon: 'success',
                     title: "{{Session::get('success')}}",
                     showConfirmButton: false,
-                    timer: 3000
+                    timer: 5000
                 })
             })
         </script>
@@ -699,7 +699,7 @@
                     icon: 'error',
                     title: "{{Session::get('error')}}",
                     showConfirmButton: false,
-                    timer: 3000
+                    timer: 5000
                 })
             })
         </script>

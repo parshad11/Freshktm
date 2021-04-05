@@ -19,6 +19,7 @@ use App\Mail\VendorRequestMail;
 use Exception;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 
 use function GuzzleHttp\json_decode;
 
@@ -31,6 +32,7 @@ class FrontendController extends Controller
      */
     public function index()
     {
+       // dd(Session::get('success'));
         $home_settings = HomeSetting::first();
         $teams = Team::where('status', 'active')->take(4)->get();
         $service = Service::where('status', 'active')->get();
@@ -76,13 +78,13 @@ class FrontendController extends Controller
     {
         try{
             Mail::to(Config::get('mail.from.address'))->send(new VendorRequestMail($request));
-            $request->session()->flash('sucess', 'Your message has been sent to Freshktm');
-
+            $request->session()->flash('success', 'Your message has been sent to Freshktm');
+        
         } catch (Exception $ex) {
             $request->session()->flash('error', 'Something went wrong');
         }
-
-        return redirect()->back();
+      
+        return redirect()->route('front_dashboard');
     }
 
 
