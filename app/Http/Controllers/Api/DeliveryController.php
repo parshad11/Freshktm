@@ -87,7 +87,9 @@ class DeliveryController extends Controller
                                         )
                                         ->get();
       
-
+                                        $delivery_data=[];
+                                        $delivery_data=$delivery;	
+                                        $delivery=collect([$delivery_data]);	                            
         return response()->json([
             'data'=>$delivery,
             'sell_lines'=>$sell_lines,
