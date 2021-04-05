@@ -131,9 +131,9 @@ class DeliveryController extends Controller
                         $prefix_type = 'expense_payment';
                     }
                     
-                    $ref_count = $this->transactionUtil->setAndGetReferenceCount($prefix_type,$transaction->business_id);
+                    $ref_count = $this->setAndGetReferenceCount($prefix_type,$transaction->business_id);
                     //Generate reference number
-                    $inputs['payment_ref_no'] = $this->transactionUtil->generateReferenceNumber($prefix_type, $ref_count);
+                    $inputs['payment_ref_no'] = $this->generateReferenceNumber($prefix_type, $ref_count);
                     $inputs['business_id'] = $transaction->business_id;
                    
                     if (!empty($inputs['amount'])) {
