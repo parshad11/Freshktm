@@ -68,28 +68,6 @@ class ProductController extends Controller
 										->active()->orderBy('display_order')->get();
         } else {
             $all_categories = Category::with(['sub_categories','sub_categories.sub_category_products.variations.media','products.variations.media'])
-										->whereHas('products',function($query){
-											$path=asset('/uploads/media/');
-											$location = BusinessLocation::where('location_id', 'BL0001')->first();
-											$variation_location_variation_ids = VariationLocationDetails::with('location')->where('location_id', $location->id)->pluck('variation_id')->toArray();
-											$query->leftJoin('variations as v','products.id','=','v.product_id')
-											->leftJoin('media as m','m.model_id','=','v.id')
-											->whereIn('v.id', $variation_location_variation_ids)
-											->select(
-												'products.id',
-												'products.name',
-												'products.type',
-												'products.product_description',
-												'v.id as variation_id',
-												'v.name as variation_name',
-												'v.sub_sku',
-												'v.market_price',
-												'v.default_sell_price as unit_price',
-												'v.sell_price_inc_tax as unit_price_with_tax',
-												'v.id as variation_id',
-												DB::raw("CONCAT('$path','/',m.file_name) as product_image")
-											);
-										})
 										->where('id', '!=', $special_categories->id)->where('parent_id', 0)->active()->orderBy('display_order')->get();
         }
 		
@@ -100,7 +78,6 @@ class ProductController extends Controller
 	}
 
 	
-
 	public function product($slug)
 	{
 		$path=asset('/uploads/media/');

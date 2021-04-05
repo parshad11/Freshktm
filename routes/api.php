@@ -29,6 +29,7 @@ Route::namespace('Api')->middleware(['cors'])->group(function () {
 
 	Route::middleware(['auth:api'])->group(function () {
 		route::get('/delivery', 'DeliveryController@index');
+		route::get('/delivery/{id}', 'DeliveryController@show');
 		route::put('/delivery/{id}', 'DeliveryController@update');
 		route::get('/delivery-people', 'DeliveryPersonController@GetAllDeliveryPeople');
 		route::get('/task', 'TaskController@index');
@@ -45,9 +46,7 @@ Route::namespace('Api')->middleware(['cors'])->group(function () {
 		Route::post('/shop/checkout', 'ShopController@store');
 
 	});
-		route::get('/delivery/location/{id}', 'DeliveryPersonController@getLocation')->name('delivery.location');
-
-
+	route::get('/delivery/location/{id}', 'DeliveryPersonController@getLocation')->name('delivery.location');
 
 
 

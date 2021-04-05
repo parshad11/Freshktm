@@ -11,6 +11,7 @@ use App\Events\TransactionPaymentAdded;
 use App\Http\Controllers\Controller;
 use App\ReferenceCount;
 use App\TransactionPayment;
+use App\TransactionSellLine;
 use App\Utils\ContactUtil;
 use App\Utils\NotificationUtil;
 use App\Utils\TransactionUtil;
@@ -51,8 +52,47 @@ class DeliveryController extends Controller
         ]);
     }
 
-    public function view($id){
+    public function show($id){
+        if (!auth()->user()->can('delivery.view')) {
+            abort(403, 'Unauthorized action.');
+        }
+        $path=asset('/uploads/media/');
+        $delivery = Delivery::leftjoin('transactions as t', 'deliveries.transaction_id','=','t.id')
+                            ->where('deliveries.id', $id)
+                            ->first();
+        $total_paid = TransactionPayment::where('transaction_id', $delivery->transaction->id)
+                ->select(DB::raw('SUM(IF( is_return = 0, amount, amount*-1))as total_paid'))
+                ->first()
+                ->total_paid;
 
+        $sell_lines=TransactionSellLine::leftJoin('products as p','transaction_sell_lines.product_id','=','p.id')
+                                        ->leftJoin('variations as v','transaction_sell_lines.variation_id','=','v.id')
+                                        ->leftJoin('media as m','m.model_id','=','v.id')
+                                        ->where('transaction_id', $delivery->transaction->id)
+                                        ->select(
+                                            'p.id',
+                                            'p.name',
+                                            'p.type',
+                                            'p.product_description',
+                                            'v.id as variation_id',
+                                            'v.name as variation_name',
+                                            'v.sub_sku',
+                                            'v.market_price',
+                                            'v.default_sell_price as unit_price',
+                                            'v.sell_price_inc_tax as unit_price_with_tax',
+                                            'v.id as variation_id',
+                                            'transaction_sell_lines.quantity',
+                                            'transaction_sell_lines.unit_price_inc_tax',
+                                            DB::raw("CONCAT('$path','/',m.file_name) as product_image")
+                                        )
+                                        ->get();
+      
+
+        return response()->json([
+            'data'=>$delivery,
+            'sell_lines'=>$sell_lines,
+            'total_paid'=>$total_paid
+        ]);
     }
 
     public function update(Request $request,$id){
