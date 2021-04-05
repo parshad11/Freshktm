@@ -61,13 +61,13 @@ class ProductController extends Controller
 
 	public function categories(){
 		
-		$special_categories = Category::with(['sub_categories','sub_categories.sub_category_products.variations','products.variations'])->where('name', 'like', '%special%')->where('parent_id', 0)->first();
+		$special_categories = Category::with(['sub_categories','sub_categories.sub_category_products.variations.media','products.variations.media'])->where('name', 'like', '%special%')->where('parent_id', 0)->first();
         
 		if ($special_categories == null) {
-            $all_categories = Category::with(['sub_categories','sub_categories.sub_category_products.variations','products.variations'])->where('parent_id', 0)
+            $all_categories = Category::with(['sub_categories','sub_categories.sub_category_products.variations.media','products.variations.media'])->where('parent_id', 0)
 										->active()->orderBy('display_order')->get();
         } else {
-            $all_categories = Category::with(['sub_categories','sub_categories.sub_category_products.variations','products.variations'])
+            $all_categories = Category::with(['sub_categories','sub_categories.sub_category_products.variations.media','products.variations.media'])
 										->whereHas('products',function($query){
 											$path=asset('/uploads/media/');
 											$location = BusinessLocation::where('location_id', 'BL0001')->first();

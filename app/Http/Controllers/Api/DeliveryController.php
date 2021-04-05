@@ -51,6 +51,10 @@ class DeliveryController extends Controller
         ]);
     }
 
+    public function view($id){
+
+    }
+
     public function update(Request $request,$id){
 
     try {
