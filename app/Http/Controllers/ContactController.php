@@ -1349,11 +1349,10 @@ class ContactController extends Controller
     }
 
     public function TrackSupplier(Request $request){
-//		dd(request()->segment(1));
 	    if (!auth()->user()->can('supplier.view')) {
 		    abort(403, 'Unauthorized action.');
 	    }
-	    $supplier=Contact::where('type','supplier')->get();
+	    $supplier=Contact::getAllSupplier();
 	    return view('contact.track',compact('supplier'));
 
     }

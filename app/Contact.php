@@ -12,7 +12,6 @@ use Spatie\Permission\Traits\HasRoles;
 use Laravel\Passport\HasApiTokens;
 
 
-
 class Contact extends Authenticatable
 {
 	use Notifiable;
@@ -24,270 +23,276 @@ class Contact extends Authenticatable
 
 	protected $guard = 'customer';
 
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
-    protected $guarded = ['id'];
+	/**
+	 * The attributes that aren't mass assignable.
+	 *
+	 * @var array
+	 */
+	protected $guarded = ['id'];
 
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    
-    // The attributes that should be hidden for arrays.
-    protected $hidden = ['password'];
+	/**
+	 * The attributes that should be mutated to dates.
+	 *
+	 * @var array
+	 */
 
-    /**
-    * Get the business that owns the user.
-    */
-    public function business()
-    {
-        return $this->belongsTo(\App\Business::class);
-    }
+	// The attributes that should be hidden for arrays.
+	protected $hidden = ['password'];
 
-    public function delivery_person(){
-        return $this->belongsTo(DeliveryPerson::class,'default_delivery_person_id');
-    }
+	/**
+	 * Get the business that owns the user.
+	 */
+	public function business()
+	{
+		return $this->belongsTo(\App\Business::class);
+	}
 
-    public function scopeActive($query)
-    {
-        return $query->where('contacts.contact_status', 'active');
-    }
+	public function delivery_person()
+	{
+		return $this->belongsTo(DeliveryPerson::class, 'default_delivery_person_id');
+	}
 
-    public function scopeOnlySuppliers($query)
-    {
-        $query->whereIn('contacts.type', ['supplier', 'both']);
+	public function scopeActive($query)
+	{
+		return $query->where('contacts.contact_status', 'active');
+	}
 
-        if (!auth()->user()->can('supplier.view') && auth()->user()->can('supplier.view_own')) {
-            $query->where('contacts.created_by', auth()->user()->id);
-        }
+	public function scopeOnlySuppliers($query)
+	{
+		$query->whereIn('contacts.type', ['supplier', 'both']);
 
-        return $query;
-    }
+		if (!auth()->user()->can('supplier.view') && auth()->user()->can('supplier.view_own')) {
+			$query->where('contacts.created_by', auth()->user()->id);
+		}
 
-    public function scopeOnlyCustomers($query)
-    {
-        $query->whereIn('contacts.type', ['customer', 'both']);
+		return $query;
+	}
 
-        if (!auth()->user()->can('customer.view') && auth()->user()->can('customer.view_own')) {
-            $query->where('contacts.created_by', auth()->user()->id);
-        }
-        return $query;
-    }
+	public function scopeOnlyCustomers($query)
+	{
+		$query->whereIn('contacts.type', ['customer', 'both']);
 
-    public function routeNotificationForMail()
-    {
-        // Return email address only...
-        return $this->email;
+		if (!auth()->user()->can('customer.view') && auth()->user()->can('customer.view_own')) {
+			$query->where('contacts.created_by', auth()->user()->id);
+		}
+		return $query;
+	}
 
-    }
+	public function routeNotificationForMail()
+	{
+		// Return email address only...
+		return $this->email;
 
-    /**
-     * Get all of the contacts's notes & documents.
-     */
-    public function documentsAndnote()
-    {
-        return $this->morphMany('App\DocumentAndNote', 'notable');
-    }
+	}
 
-    /**
-     * Return list of contact dropdown for a business
-     *
-     * @param $business_id int
-     * @param $exclude_default = false (boolean)
-     * @param $prepend_none = true (boolean)
-     *
-     * @return array users
-     */
-    public static function contactDropdown($business_id, $exclude_default = false, $prepend_none = true, $append_id = true)
-    {
-        $query = Contact::where('business_id', $business_id)
-                    ->where('type', '!=', 'lead')
-                    ->active();
-                    
-        if ($exclude_default) {
-            $query->where('is_default', 0);
-        }
+	/**
+	 * Get all of the contacts's notes & documents.
+	 */
+	public function documentsAndnote()
+	{
+		return $this->morphMany('App\DocumentAndNote', 'notable');
+	}
 
-        if ($append_id) {
-            $query->select(
-                DB::raw("IF(contact_id IS NULL OR contact_id='', name, CONCAT(name, ' - ', COALESCE(supplier_business_name, ''), '(', contact_id, ')')) AS supplier"),
-                'id'
-                    );
-        } else {
-            $query->select(
-                'id',
-                DB::raw("IF (supplier_business_name IS not null, CONCAT(name, ' (', supplier_business_name, ')'), name) as supplier")
-            );
-        }
-        
-        if (!auth()->user()->can('supplier.view') && auth()->user()->can('supplier.view_own')) {
-            $query->where('contacts.created_by', auth()->user()->id);
-        }
+	/**
+	 * Return list of contact dropdown for a business
+	 *
+	 * @param $business_id int
+	 * @param $exclude_default = false (boolean)
+	 * @param $prepend_none = true (boolean)
+	 *
+	 * @return array users
+	 */
+	public static function contactDropdown($business_id, $exclude_default = false, $prepend_none = true, $append_id = true)
+	{
+		$query = Contact::where('business_id', $business_id)
+			->where('type', '!=', 'lead')
+			->active();
 
-        $contacts = $query->pluck('supplier', 'id');
+		if ($exclude_default) {
+			$query->where('is_default', 0);
+		}
 
-        //Prepend none
-        if ($prepend_none) {
-            $contacts = $contacts->prepend(__('lang_v1.none'), '');
-        }
+		if ($append_id) {
+			$query->select(
+				DB::raw("IF(contact_id IS NULL OR contact_id='', name, CONCAT(name, ' - ', COALESCE(supplier_business_name, ''), '(', contact_id, ')')) AS supplier"),
+				'id'
+			);
+		} else {
+			$query->select(
+				'id',
+				DB::raw("IF (supplier_business_name IS not null, CONCAT(name, ' (', supplier_business_name, ')'), name) as supplier")
+			);
+		}
 
-        return $contacts;
-    }
+		if (!auth()->user()->can('supplier.view') && auth()->user()->can('supplier.view_own')) {
+			$query->where('contacts.created_by', auth()->user()->id);
+		}
 
-    /**
-     * Return list of suppliers dropdown for a business
-     *
-     * @param $business_id int
-     * @param $prepend_none = true (boolean)
-     *
-     * @return array users
-     */
-    public static function suppliersDropdown($business_id, $prepend_none = true, $append_id = true)
-    {
-        $all_contacts = Contact::where('business_id', $business_id)
-                        ->whereIn('type', ['supplier', 'both'])
-                        ->active();
+		$contacts = $query->pluck('supplier', 'id');
 
-        if ($append_id) {
-            $all_contacts->select(
-                DB::raw("IF(contact_id IS NULL OR contact_id='', name, CONCAT(name, ' - ', COALESCE(supplier_business_name, ''), '(', contact_id, ')')) AS supplier"),
-                'id'
-                    );
-        } else {
-            $all_contacts->select(
-                'id',
-                DB::raw("CONCAT(name, ' (', supplier_business_name, ')') as supplier")
-                );
-        }
+		//Prepend none
+		if ($prepend_none) {
+			$contacts = $contacts->prepend(__('lang_v1.none'), '');
+		}
 
-        if (!auth()->user()->can('supplier.view') && auth()->user()->can('supplier.view_own')) {
-            $all_contacts->where('contacts.created_by', auth()->user()->id);
-        }
+		return $contacts;
+	}
 
-        $suppliers = $all_contacts->pluck('supplier', 'id');
+	/**
+	 * Return list of suppliers dropdown for a business
+	 *
+	 * @param $business_id int
+	 * @param $prepend_none = true (boolean)
+	 *
+	 * @return array users
+	 */
+	public static function suppliersDropdown($business_id, $prepend_none = true, $append_id = true)
+	{
+		$all_contacts = Contact::where('business_id', $business_id)
+			->whereIn('type', ['supplier', 'both'])
+			->active();
 
-        //Prepend none
-        if ($prepend_none) {
-            $suppliers = $suppliers->prepend(__('lang_v1.none'), '');
-        }
+		if ($append_id) {
+			$all_contacts->select(
+				DB::raw("IF(contact_id IS NULL OR contact_id='', name, CONCAT(name, ' - ', COALESCE(supplier_business_name, ''), '(', contact_id, ')')) AS supplier"),
+				'id'
+			);
+		} else {
+			$all_contacts->select(
+				'id',
+				DB::raw("CONCAT(name, ' (', supplier_business_name, ')') as supplier")
+			);
+		}
 
-        return $suppliers;
-    }
+		if (!auth()->user()->can('supplier.view') && auth()->user()->can('supplier.view_own')) {
+			$all_contacts->where('contacts.created_by', auth()->user()->id);
+		}
 
-    /**
-     * Return list of customers dropdown for a business
-     *
-     * @param $business_id int
-     * @param $prepend_none = true (boolean)
-     *
-     * @return array users
-     */
-    public static function customersDropdown($business_id, $prepend_none = true, $append_id = true)
-    {
-        $all_contacts = Contact::where('business_id', $business_id)
-                        ->whereIn('type', ['customer', 'both'])
-                        ->active();
+		$suppliers = $all_contacts->pluck('supplier', 'id');
 
-        if ($append_id) {
-            $all_contacts->select(
-                DB::raw("IF(contact_id IS NULL OR contact_id='', name, CONCAT(name, ' (', contact_id, ')')) AS customer"),
-                'id'
-                );
-        } else {
-            $all_contacts->select('id', DB::raw("name as customer"));
-        }
+		//Prepend none
+		if ($prepend_none) {
+			$suppliers = $suppliers->prepend(__('lang_v1.none'), '');
+		}
 
-        if (!auth()->user()->can('customer.view') && auth()->user()->can('customer.view_own')) {
-            $all_contacts->where('contacts.created_by', auth()->user()->id);
-        }
+		return $suppliers;
+	}
 
-        $customers = $all_contacts->pluck('customer', 'id');
+	/**
+	 * Return list of customers dropdown for a business
+	 *
+	 * @param $business_id int
+	 * @param $prepend_none = true (boolean)
+	 *
+	 * @return array users
+	 */
+	public static function customersDropdown($business_id, $prepend_none = true, $append_id = true)
+	{
+		$all_contacts = Contact::where('business_id', $business_id)
+			->whereIn('type', ['customer', 'both'])
+			->active();
 
-        //Prepend none
-        if ($prepend_none) {
-            $customers = $customers->prepend(__('lang_v1.none'), '');
-        }
+		if ($append_id) {
+			$all_contacts->select(
+				DB::raw("IF(contact_id IS NULL OR contact_id='', name, CONCAT(name, ' (', contact_id, ')')) AS customer"),
+				'id'
+			);
+		} else {
+			$all_contacts->select('id', DB::raw("name as customer"));
+		}
 
-        return $customers;
-    }
+		if (!auth()->user()->can('customer.view') && auth()->user()->can('customer.view_own')) {
+			$all_contacts->where('contacts.created_by', auth()->user()->id);
+		}
 
-    /**
-     * Return list of contact type.
-     *
-     * @param $prepend_all = false (boolean)
-     * @return array
-     */
-    public static function typeDropdown($prepend_all = false)
-    {
-        $types = [];
+		$customers = $all_contacts->pluck('customer', 'id');
 
-        if ($prepend_all) {
-            $types[''] = __('lang_v1.all');
-        }
+		//Prepend none
+		if ($prepend_none) {
+			$customers = $customers->prepend(__('lang_v1.none'), '');
+		}
 
-        $types['customer'] = __('report.customer');
-        $types['supplier'] = __('report.supplier');
-        $types['both'] = __('lang_v1.both_supplier_customer');
+		return $customers;
+	}
 
-        return $types;
-    }
+	/**
+	 * Return list of contact type.
+	 *
+	 * @param $prepend_all = false (boolean)
+	 * @return array
+	 */
+	public static function typeDropdown($prepend_all = false)
+	{
+		$types = [];
 
-    /**
-     * Return list of contact type by permissions.
-     *
-     * @return array
-     */
-    public static function getContactTypes()
-    {
-        $types = [];
-        if (auth()->user()->can('supplier.create')) {
-            $types['supplier'] = __('report.supplier');
-        }
-        if (auth()->user()->can('customer.create')) {
-            $types['customer'] = __('report.customer');
-        }
-        if (auth()->user()->can('supplier.create') && auth()->user()->can('customer.create')) {
-            $types['both'] = __('lang_v1.both_supplier_customer');
-        }
+		if ($prepend_all) {
+			$types[''] = __('lang_v1.all');
+		}
 
-        return $types;
-    }
+		$types['customer'] = __('report.customer');
+		$types['supplier'] = __('report.supplier');
+		$types['both'] = __('lang_v1.both_supplier_customer');
 
-    public function getContactAddressAttribute()
-    {
-        $address_array = [];
-        if (!empty($this->address_line_1)) {
-            $address_array[] = $this->address_line_1;
-        }
-        if (!empty($this->address_line_2)) {
-            $address_array[] = $this->address_line_2;
-        }
-        if (!empty($this->city)) {
-            $address_array[] = $this->city;
-        }
-        if (!empty($this->state)) {
-            $address_array[] = $this->state;
-        }
-        if (!empty($this->country)) {
-            $address_array[] = $this->country;
-        }
+		return $types;
+	}
 
-        $address = '';
-        if (!empty($address_array)) {
-            $address = implode(', ', $address_array);
-        }
-        if (!empty($this->zip_code)) {
-            $address .= ',<br>' . $this->zip_code;
-        }
+	/**
+	 * Return list of contact type by permissions.
+	 *
+	 * @return array
+	 */
+	public static function getContactTypes()
+	{
+		$types = [];
+		if (auth()->user()->can('supplier.create')) {
+			$types['supplier'] = __('report.supplier');
+		}
+		if (auth()->user()->can('customer.create')) {
+			$types['customer'] = __('report.customer');
+		}
+		if (auth()->user()->can('supplier.create') && auth()->user()->can('customer.create')) {
+			$types['both'] = __('lang_v1.both_supplier_customer');
+		}
 
-        return $address;
-    }
+		return $types;
+	}
 
+	public function getContactAddressAttribute()
+	{
+		$address_array = [];
+		if (!empty($this->address_line_1)) {
+			$address_array[] = $this->address_line_1;
+		}
+		if (!empty($this->address_line_2)) {
+			$address_array[] = $this->address_line_2;
+		}
+		if (!empty($this->city)) {
+			$address_array[] = $this->city;
+		}
+		if (!empty($this->state)) {
+			$address_array[] = $this->state;
+		}
+		if (!empty($this->country)) {
+			$address_array[] = $this->country;
+		}
 
+		$address = '';
+		if (!empty($address_array)) {
+			$address = implode(', ', $address_array);
+		}
+		if (!empty($this->zip_code)) {
+			$address .= ',<br>' . $this->zip_code;
+		}
+
+		return $address;
+	}
+
+	public static function getAllSupplier()
+	{
+		$contact = Contact::where('type', 'supplier')->get();
+//		$contact=$contact->pluck('name');
+		return $contact;
+	}
 
 
 }
