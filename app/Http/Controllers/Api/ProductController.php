@@ -70,7 +70,9 @@ class ProductController extends Controller
             $all_categories = Category::with(['sub_categories','sub_categories.sub_category_products.variations.media','products.variations.media'])
 										->where('id', '!=', $special_categories->id)->where('parent_id', 0)->active()->orderBy('display_order')->get();
         }
-		
+		$items=[];
+		$items=$special_categories;
+		$special_categories=collect([$items]);	
 		return response()->json([
 			'categories' => $all_categories,
 			'special_category'=>$special_categories
