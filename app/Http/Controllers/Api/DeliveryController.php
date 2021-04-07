@@ -80,9 +80,7 @@ class DeliveryController extends Controller
             ->select(DB::raw('SUM(IF( is_return = 0, amount, amount*-1))as total_paid'))
             ->first()
             ->total_paid;
-        $total_paid=isset($total_paid)?$total_paid:0;
         
-
         $sell_lines = TransactionSellLine::leftJoin('products as p', 'transaction_sell_lines.product_id', '=', 'p.id')
             ->leftJoin('variations as v', 'transaction_sell_lines.variation_id', '=', 'v.id')
             ->leftJoin('media as m', 'm.model_id', '=', 'v.id')
@@ -107,6 +105,9 @@ class DeliveryController extends Controller
             )
             ->get();
         $due_amount=$delivery->final_total-$total_paid;
+        $total_paid=isset($total_paid)?$total_paid:0;
+        $due_amount=(string)$due_amount;
+        $total_paid=(string)$total_paid;
         $delivery_data = $delivery;
         $delivery = collect([$delivery_data]);
         return response()->json([
