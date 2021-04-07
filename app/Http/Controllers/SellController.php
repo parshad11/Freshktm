@@ -387,7 +387,7 @@ class SellController extends Controller
                     $count = count($methods);
                     $payment_method = '';
                     if ($count == 1) {
-                        $payment_method = $payment_types[$methods['0']];
+                        $payment_method = 'cash';
                     } elseif ($count > 1) {
                         $payment_method = __('lang_v1.checkout_multi_pay');
                     }
