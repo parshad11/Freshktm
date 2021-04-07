@@ -727,6 +727,7 @@ class DeliveryController extends Controller
 
     public function statusupdate(Request $request, $id)
     {
+        
         if (!auth()->user()->can('delivery.update')) {
             abort(403, 'Unauthorized action.');
         }
@@ -746,6 +747,7 @@ class DeliveryController extends Controller
             DB::beginTransaction();
             $update_data['delivery_status'] = $request->input('delivery_status');
             $delivery->update($update_data);
+            
             if ($delivery->delivery_status == 'received') {
                 $delivery->delivery_started_at = null;
                 $delivery->delivery_ended_at = null;
@@ -796,12 +798,8 @@ class DeliveryController extends Controller
                 $delivery->save();
 
             }
+          
             DB::commit();
-	        $delivery=Delivery::findorfail($id);
-	        $delivery_person = DeliveryPerson::find($delivery->delivery_person_id);
-	        $user=User::find($delivery_person->user_id);
-	        $user->notify(new DeliveryAssignedNotification($delivery->record_staff->user_name,$delivery->id));
-
             $output = ['success' => 1,
                 'msg' => __('Delivery status updated succesfully')
             ];

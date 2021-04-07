@@ -48,7 +48,7 @@
                             @endif
                         </ul>
                     </div>
-                    <div class="subscribe-area">
+                    <div class="subscribe-area hide">
                         <div class="footer-title">
                             <h2>Subscribe for Newsletter</h2>
                         </div>
