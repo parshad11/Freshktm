@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 use App\Contact;
+use Illuminate\Support\Facades\Auth;
 
 class ExpenseController extends Controller
 {
@@ -155,7 +156,7 @@ class ExpenseController extends Controller
 
             $is_admin = $this->moduleUtil->is_admin(auth()->user(), $business_id);
             if (!$is_admin && auth()->user()->can('view_own_expense')) {
-                $expenses->where('transactions.created_by', request()->session()->get('user.id'));
+                $expenses->where('transactions.created_by', Auth::user()->id);
             }
             
             return Datatables::of($expenses)
@@ -324,7 +325,7 @@ class ExpenseController extends Controller
                 'document' => 'file|max:'. (config('constants.document_size_limit') / 1000)
             ]);
 
-            $user_id = $request->session()->get('user.id');
+            $user_id = Auth::user()->id;
 
             DB::beginTransaction();
             

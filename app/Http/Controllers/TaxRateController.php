@@ -9,6 +9,7 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 
 use App\Utils\TaxUtil;
+use Illuminate\Support\Facades\Auth;
 
 class TaxRateController extends Controller
 {
@@ -98,7 +99,7 @@ class TaxRateController extends Controller
         try {
             $input = $request->only(['name', 'amount']);
             $input['business_id'] = $request->session()->get('user.business_id');
-            $input['created_by'] = $request->session()->get('user.id');
+            $input['created_by'] = Auth::user()->id;
             $input['amount'] = $this->taxUtil->num_uf($input['amount']);
             $input['for_tax_group'] = !empty($request->for_tax_group) ? 1 : 0;
 

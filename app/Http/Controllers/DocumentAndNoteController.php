@@ -7,6 +7,7 @@ use App\Media;
 use App\User;
 use App\Utils\ModuleUtil;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -37,7 +38,7 @@ class DocumentAndNoteController extends Controller
     {
         if (request()->ajax()) {
             $business_id = request()->session()->get('user.business_id');
-            $user_id = request()->session()->get('user.id');
+            $user_id = Auth::user()->id;
             //model id like project_id, user_id
             $notable_id = request()->get('notable_id');
             //model name like App\User
@@ -217,7 +218,7 @@ class DocumentAndNoteController extends Controller
 
             $input = $request->only('heading', 'description', 'is_private');
             $input['business_id'] = request()->session()->get('user.business_id');
-            $input['created_by'] = request()->session()->get('user.id');
+            $input['created_by'] = Auth::user()->id;
 
             DB::beginTransaction();
 

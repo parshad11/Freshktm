@@ -31,6 +31,7 @@ use Datatables;
 use DB;
 use Illuminate\Http\Request;
 use App\TaxRate;
+use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
@@ -2991,7 +2992,7 @@ class ReportController extends Controller
             }
 
             if (!auth()->user()->can('purchase.view') && auth()->user()->can('view_own_purchase')) {
-                $purchases->where('transactions.created_by', request()->session()->get('user.id'));
+                $purchases->where('transactions.created_by', Auth::user()->id);
             }
 
             return Datatables::of($purchases)

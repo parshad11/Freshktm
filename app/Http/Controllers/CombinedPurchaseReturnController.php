@@ -10,6 +10,7 @@ use App\Utils\ModuleUtil;
 use App\Utils\ProductUtil;
 use App\Utils\TransactionUtil;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CombinedPurchaseReturnController extends Controller
@@ -88,7 +89,7 @@ class CombinedPurchaseReturnController extends Controller
                 return $this->moduleUtil->expiredResponse();
             }
         
-            $user_id = $request->session()->get('user.id');
+            $user_id = Auth::user()->id;
 
             $input_data['type'] = 'purchase_return';
             $input_data['business_id'] = $business_id;

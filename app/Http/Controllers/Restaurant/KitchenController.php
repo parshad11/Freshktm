@@ -12,6 +12,7 @@ use App\TransactionSellLine;
 use App\Utils\Util;
 
 use App\Utils\RestaurantUtil;
+use Illuminate\Support\Facades\Auth;
 
 class KitchenController extends Controller
 {
@@ -99,7 +100,7 @@ class KitchenController extends Controller
         $business_id = request()->session()->get('user.business_id');
         $orders_for = $request->orders_for;
         $filter = [];
-        $service_staff_id = request()->session()->get('user.id');
+        $service_staff_id = Auth::user()->id;
 
         if (!$this->restUtil->is_service_staff($service_staff_id) && !empty($request->input('service_staff_id'))) {
             $service_staff_id = $request->input('service_staff_id');
@@ -129,7 +130,7 @@ class KitchenController extends Controller
         $business_id = request()->session()->get('user.business_id');
         $orders_for = $request->orders_for;
         $filter = [];
-        $service_staff_id = request()->session()->get('user.id');
+        $service_staff_id = Auth::user()->id;
 
         if (!$this->restUtil->is_service_staff($service_staff_id) && !empty($request->input('service_staff_id'))) {
             $service_staff_id = $request->input('service_staff_id');

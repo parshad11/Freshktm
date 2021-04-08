@@ -62,6 +62,7 @@ use Yajra\DataTables\Facades\DataTables;
 use App\InvoiceScheme;
 use App\Notifications\CustomerNotification;
 use App\NotificationTemplate;
+use Illuminate\Support\Facades\Auth;
 
 class SellPosController extends Controller
 {
@@ -342,7 +343,7 @@ class SellPosController extends Controller
                     return $this->moduleUtil->quotaExpiredResponse('invoices', $business_id, action('SellPosController@index'));
                 }
         
-                $user_id = $request->session()->get('user.id');
+                $user_id = Auth::user()->id;
 
                 $discount = ['discount_type' => $input['discount_type'],
                                 'discount_amount' => $input['discount_amount']
@@ -1030,7 +1031,7 @@ class SellPosController extends Controller
                 }
 
                 $business_id = $request->session()->get('user.business_id');
-                $user_id = $request->session()->get('user.id');
+                $user_id = Auth::user()->id;
                 $commsn_agnt_setting = $request->session()->get('business.sales_cmsn_agnt');
 
                 $discount = ['discount_type' => $input['discount_type'],
@@ -1465,7 +1466,7 @@ class SellPosController extends Controller
     public function getRecentTransactions(Request $request)
     {
         $business_id = $request->session()->get('user.business_id');
-        $user_id = $request->session()->get('user.id');
+        $user_id = Auth::user()->id;
         $transaction_status = $request->get('status');
 
         $register = $this->cashRegisterUtil->getCurrentCashRegister($user_id);

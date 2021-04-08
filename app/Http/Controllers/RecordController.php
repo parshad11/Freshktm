@@ -14,6 +14,7 @@ use App\Unit;
 use App\User;
 use App\Utils\ModuleUtil;
 use App\Utils\RecordUtil;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class RecordController extends Controller
@@ -146,7 +147,7 @@ class RecordController extends Controller
 
         try {
             $business_id = $request->session()->get('user.business_id');
-            $user_id = $request->session()->get('user.id');
+            $user_id = Auth::user()->id;
             $record_data = $request->only(['contact_id','item','expected_collection_date','location','quantity','unit_id']);
             $record_data['created_by'] = $user_id;
             $record_data['business_id'] = $business_id;

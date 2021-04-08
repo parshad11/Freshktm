@@ -7,6 +7,7 @@ use App\GroupSubTax;
 use Datatables;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GroupTaxController extends Controller
 {
@@ -68,7 +69,7 @@ class GroupTaxController extends Controller
         try {
             $input['name'] = $request->input('name');
             $input['business_id'] = $request->session()->get('user.business_id');
-            $input['created_by'] = $request->session()->get('user.id');
+            $input['created_by'] = Auth::user()->id;
             $sub_tax_ids = $request->input('taxes');
 
             $sub_taxes = TaxRate::whereIn('id', $sub_tax_ids)->get();

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Brands;
 use App\Utils\ModuleUtil;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class BrandController extends Controller
@@ -98,7 +99,7 @@ class BrandController extends Controller
             $input = $request->only(['name', 'description']);
             $business_id = $request->session()->get('user.business_id');
             $input['business_id'] = $business_id;
-            $input['created_by'] = $request->session()->get('user.id');
+            $input['created_by'] = Auth::user()->id;
 
             $brand = Brands::create($input);
             $output = ['success' => true,

@@ -12,6 +12,7 @@ use App\Variation;
 use DB;
 use Excel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ImportOpeningStockController extends Controller
 {
@@ -93,7 +94,7 @@ class ImportOpeningStockController extends Controller
                 $imported_data = array_splice($parsed_array[0], 1);
 
                 $business_id = $request->session()->get('user.business_id');
-                $user_id = $request->session()->get('user.id');
+                $user_id = Auth::user()->id;
 
                 $formated_data = [];
 
@@ -219,7 +220,7 @@ class ImportOpeningStockController extends Controller
      */
     private function addOpeningStock($opening_stock, $product, $business_id, $unit_cost_before_tax, $transaction = null)
     {
-        $user_id = request()->session()->get('user.id');
+        $user_id = Auth::user()->id;
 
         $transaction_date = request()->session()->get("financial_year.start");
         $transaction_date = \Carbon::createFromFormat('Y-m-d', $transaction_date)->toDateTimeString();

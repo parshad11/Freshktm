@@ -17,6 +17,7 @@ use App\Front\Testimonial;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Utils\Util;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\Constraint\Count;
 
@@ -133,7 +134,7 @@ class CmsController extends Controller
         }
         $data['client_images'] = implode(",", $client_photos);
         $data['google_map_link'] = $request->google_map_link;
-        $data['created_by'] = $request->session()->get('user.id');
+        $data['created_by'] = Auth::user()->id;
         $this->setting->fill($data);
         $status = $this->setting->save();
         if ($status) {
@@ -254,7 +255,7 @@ class CmsController extends Controller
         }
         $data['client_images'] = implode(",", $client_photos);
         $data['google_map_link'] = $request->google_map_link;
-        $data['created_by'] = $request->session()->get('user.id');
+        $data['created_by'] = Auth::user()->id;
         $this->setting->fill($data);
         // dd($this->setting);
         $status = $this->setting->save();
@@ -300,7 +301,7 @@ class CmsController extends Controller
             $data['why_image'] = $this->util->uploadHomeFile($request->why_image[0], config('constants.product_img_path') . '/home/about');
         }
         $data['why_short_points'] = json_encode($request->why_short_points);
-        $data['added_by'] = $request->session()->get('user.id');
+        $data['added_by'] = Auth::user()->id;
         $this->about->fill($data);
         $status = $this->about->save();
         if ($status) {
@@ -371,7 +372,7 @@ class CmsController extends Controller
         $this->team->name = $request->name;
         $this->team->post = $request->post;
         $this->team->social_links = json_encode(array_combine($request->social_name, $request->social_link));
-        $this->team->added_by = $request->session()->get('user.id');
+        $this->team->added_by = Auth::user()->id;
         if ($request->hasFile('member_image')) {
             $this->team->member_image = $this->util->uploadHomeFile($request->member_image[0], config('constants.product_img_path') . '/home/team');
         }
@@ -463,7 +464,7 @@ class CmsController extends Controller
         if ($request->hasFile('service_image')) {
             $data['service_image'] = $this->util->uploadHomeFile($request->service_image[0], config('constants.product_img_path') . '/home/services');
         }
-        $data['added_by'] = $request->session()->get('user.id');
+        $data['added_by'] = Auth::user()->id;
         $this->service->fill($data);
         $status = $this->service->save();
         if ($status) {
@@ -557,7 +558,7 @@ class CmsController extends Controller
         if ($request->hasFile('blog_image')) {
             $data['image'] = $this->util->uploadHomeFile($request->blog_image[0], config('constants.product_img_path') . '/home/blogs');
         }
-        $data['added_by'] = $request->session()->get('user.id');
+        $data['added_by'] = Auth::user()->id;
         $this->blog->fill($data);
         $status = $this->blog->save();
         if ($status) {
@@ -653,7 +654,7 @@ class CmsController extends Controller
         if ($request->hasFile('testimonial_image')) {
             $data['image'] = $this->util->uploadHomeFile($request->testimonial_image[0], config('constants.product_img_path') . '/home/testimonials');
         }
-        $data['added_by'] = $request->session()->get('user.id');
+        $data['added_by'] = Auth::user()->id;
         $testimonial->fill($data);
         $status = $testimonial->save();
         if ($status) {
@@ -768,7 +769,7 @@ class CmsController extends Controller
         $page->title = $request->title;
         $page->slug = Str::slug($request->title);
         $page->body = $request->body;
-        $page->added_by = $request->session()->get('user.id');
+        $page->added_by = Auth::user()->id;
         $status = $page->save();
         if ($status) {
             $output = [
@@ -838,7 +839,7 @@ class CmsController extends Controller
         $career->job_title = $request->job_title;
         $career->job_description = $request->job_description;
         $career->form_link = $request->form_link;
-        $career->added_by = $request->session()->get('user.id');
+        $career->added_by = Auth::user()->id;
         $status = $career->save();
         if ($status) {
             $output = [

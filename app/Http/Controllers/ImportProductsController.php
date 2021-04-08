@@ -17,6 +17,7 @@ use App\VariationValueTemplate;
 use DB;
 use Excel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ImportProductsController extends Controller
 {
@@ -101,7 +102,7 @@ class ImportProductsController extends Controller
                 $imported_data = array_splice($parsed_array[0], 1);
 
                 $business_id = $request->session()->get('user.business_id');
-                $user_id = $request->session()->get('user.id');
+                $user_id = Auth::user()->id;
                 $default_profit_percent = $request->session()->get('business.default_profit_percent');
 
                 $formated_data = [];
@@ -741,7 +742,7 @@ class ImportProductsController extends Controller
      */
     private function addOpeningStock($opening_stock, $product, $business_id)
     {
-        $user_id = request()->session()->get('user.id');
+        $user_id = Auth::user()->id;
         
         $variation = Variation::where('product_id', $product->id)
             ->first();
@@ -805,7 +806,7 @@ class ImportProductsController extends Controller
 
     private function addOpeningStockForVariable($variations, $product, $business_id)
     {
-        $user_id = request()->session()->get('user.id');
+        $user_id = Auth::user()->id;
 
         $transaction_date = request()->session()->get("financial_year.start");
         $transaction_date = \Carbon::createFromFormat('Y-m-d', $transaction_date)->toDateTimeString();

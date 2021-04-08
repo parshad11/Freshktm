@@ -9,6 +9,7 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 
 use App\Utils\Util;
+use Illuminate\Support\Facades\Auth;
 
 class UnitController extends Controller
 {
@@ -119,7 +120,7 @@ class UnitController extends Controller
         try {
             $input = $request->only(['actual_name', 'short_name', 'allow_decimal']);
             $input['business_id'] = $request->session()->get('user.business_id');
-            $input['created_by'] = $request->session()->get('user.id');
+            $input['created_by'] = Auth::user()->id;
 
             if ($request->has('define_base_unit')) {
                 if (!empty($request->input('base_unit_id')) && !empty($request->input('base_unit_multiplier'))) {

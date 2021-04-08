@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use App\BusinessLocation;
+use Illuminate\Support\Facades\Auth;
 
 class PurchaseReturnController extends Controller
 {
@@ -291,7 +292,7 @@ class PurchaseReturnController extends Controller
                 $return_transaction_data['status'] = 'final';
                 $return_transaction_data['contact_id'] = $purchase->contact_id;
                 $return_transaction_data['transaction_date'] = \Carbon::now();
-                $return_transaction_data['created_by'] = request()->session()->get('user.id');
+                $return_transaction_data['created_by'] = Auth::user()->id;
                 $return_transaction_data['return_parent_id'] = $purchase->id;
 
                 $return_transaction = Transaction::create($return_transaction_data);

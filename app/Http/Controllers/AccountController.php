@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Yajra\DataTables\Facades\DataTables;
 use App\Media;
+use Illuminate\Support\Facades\Auth;
 
 class AccountController extends Controller
 {
@@ -179,7 +180,7 @@ class AccountController extends Controller
 			try {
 				$input = $request->only(['name', 'account_number', 'note', 'account_type_id']);
 				$business_id = $request->session()->get('user.business_id');
-				$user_id = $request->session()->get('user.id');
+				$user_id = Auth::user()->id;
 				$input['business_id'] = $business_id;
 				$input['created_by'] = $user_id;
 
@@ -505,7 +506,7 @@ class AccountController extends Controller
 					'account_id' => $from,
 					'type' => 'debit',
 					'sub_type' => 'fund_transfer',
-					'created_by' => session()->get('user.id'),
+					'created_by' => Auth::user()->id,
 					'note' => $note,
 					'transfer_account_id' => $to,
 					'operation_date' => $this->commonUtil->uf_date($request->input('operation_date'), true),
@@ -519,7 +520,7 @@ class AccountController extends Controller
 					'account_id' => $to,
 					'type' => 'credit',
 					'sub_type' => 'fund_transfer',
-					'created_by' => session()->get('user.id'),
+					'created_by' => Auth::user()->id,
 					'note' => $note,
 					'transfer_account_id' => $from,
 					'transfer_transaction_id' => $debit->id,
@@ -608,7 +609,7 @@ class AccountController extends Controller
 					'type' => 'credit',
 					'sub_type' => 'deposit',
 					'operation_date' => $this->commonUtil->uf_date($request->input('operation_date'), true),
-					'created_by' => session()->get('user.id'),
+					'created_by' => Auth::user()->id,
 					'note' => $note
 				];
 				$credit = AccountTransaction::createAccountTransaction($credit_data);

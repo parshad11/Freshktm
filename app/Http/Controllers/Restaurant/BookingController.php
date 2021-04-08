@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Yajra\DataTables\Facades\DataTables;
 use App\Utils\RestaurantUtil;
+use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
@@ -43,7 +44,7 @@ class BookingController extends Controller
 
         $user_id = request()->has('user_id') ? request()->user_id : null;
         if (!auth()->user()->hasPermissionTo('crud_all_bookings') && !$this->restUtil->is_admin(auth()->user(), $business_id)) {
-            $user_id = request()->session()->get('user.id');
+            $user_id = Auth::user()->id;
         }
         if (request()->ajax()) {
             $filters = [
@@ -95,7 +96,7 @@ class BookingController extends Controller
         try {
             if ($request->ajax()) {
                 $business_id = request()->session()->get('user.business_id');
-                $user_id = request()->session()->get('user.id');
+                $user_id = Auth::user()->id;
 
                 $input = $request->input();
                 $booking_start = $this->commonUtil->uf_date($input['booking_start'], true);
@@ -271,7 +272,7 @@ class BookingController extends Controller
 
         if (request()->ajax()) {
             $business_id = request()->session()->get('user.business_id');
-            $user_id = request()->session()->get('user.id');
+            $user_id = Auth::user()->id;
             $today = \Carbon::now()->format('Y-m-d');
             $query = Booking::where('business_id', $business_id)
                         ->where('booking_status', 'booked')

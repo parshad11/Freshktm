@@ -15,6 +15,7 @@ use Datatables;
 
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StockAdjustmentController extends Controller
 {
@@ -167,7 +168,7 @@ class StockAdjustmentController extends Controller
                 return $this->moduleUtil->expiredResponse(action('StockAdjustmentController@index'));
             }
         
-            $user_id = $request->session()->get('user.id');
+            $user_id = Auth::user()->id;
 
             $input_data['type'] = 'stock_adjustment';
             $input_data['business_id'] = $business_id;
@@ -406,7 +407,7 @@ class StockAdjustmentController extends Controller
                 $qty_unsold = $purchase_line->quantity - $purchase_line->quantity_sold - $purchase_line->quantity_adjusted - $purchase_line->quantity_returned;
                 $final_total = $purchase_line->purchase_price_inc_tax * $qty_unsold;
 
-                $user_id = request()->session()->get('user.id');
+                $user_id = Auth::user()->id;
                 $business_id = request()->session()->get('user.business_id');
 
                 //Update reference count

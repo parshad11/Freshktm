@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use App\TransactionSellLine;
 use App\Events\TransactionPaymentDeleted;
+use Illuminate\Support\Facades\Auth;
 
 class SellReturnController extends Controller
 {
@@ -270,7 +271,7 @@ class SellReturnController extends Controller
                     return $this->moduleUtil->expiredResponse(action('SellReturnController@index'));
                 }
         
-                $user_id = $request->session()->get('user.id');
+                $user_id = Auth::user()->id;
 
                 DB::beginTransaction();
 

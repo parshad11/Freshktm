@@ -9,6 +9,7 @@ use Datatables;
 
 use App\Restaurant\ResTable;
 use App\BusinessLocation;
+use Illuminate\Support\Facades\Auth;
 
 class TableController extends Controller
 {
@@ -81,7 +82,7 @@ class TableController extends Controller
             $input = $request->only(['name', 'description', 'location_id']);
             $business_id = $request->session()->get('user.business_id');
             $input['business_id'] = $business_id;
-            $input['created_by'] = $request->session()->get('user.id');
+            $input['created_by'] = Auth::user()->id;
 
             $table = ResTable::create($input);
             $output = ['success' => true,

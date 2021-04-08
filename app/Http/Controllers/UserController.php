@@ -6,6 +6,7 @@ use App\Media;
 use App\User;
 use App\Utils\ModuleUtil;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -43,7 +44,7 @@ class UserController extends Controller
      */
     public function getProfile()
     {
-        $user_id = request()->session()->get('user.id');
+        $user_id = Auth::user()->id;
         $user = User::where('id', $user_id)->with(['media'])->first();
         $config_languages = config('constants.langs');
         $languages = [];
@@ -68,7 +69,7 @@ class UserController extends Controller
         }
 
         try {
-            $user_id = $request->session()->get('user.id');
+            $user_id = Auth::user()->id;
             $input = $request->only(['surname', 'first_name', 'last_name', 'email', 'language', 'marital_status',
                 'blood_group', 'contact_number', 'fb_link', 'twitter_link', 'social_media_1',
                 'social_media_2', 'permanent_address', 'current_address',
@@ -120,7 +121,7 @@ class UserController extends Controller
         }
 
         try {
-            $user_id = $request->session()->get('user.id');
+            $user_id = Auth::user()->id;
             $user = User::where('id', $user_id)->first();
             
             if (Hash::check($request->input('current_password'), $user->password)) {

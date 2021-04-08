@@ -11,7 +11,7 @@ use App\Utils\ProductUtil;
 
 use App\Utils\TransactionUtil;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class OpeningStockController extends Controller
@@ -143,7 +143,7 @@ class OpeningStockController extends Controller
             $product_id = $request->input('product_id');
 
             $business_id = $request->session()->get('user.business_id');
-            $user_id = $request->session()->get('user.id');
+            $user_id = Auth::user()->id;
 
             $product = Product::where('business_id', $business_id)
                                 ->where('id', $product_id)

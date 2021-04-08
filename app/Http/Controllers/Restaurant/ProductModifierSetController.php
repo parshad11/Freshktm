@@ -8,6 +8,7 @@ use App\Variation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ProductModifierSetController extends Controller
@@ -62,7 +63,7 @@ class ProductModifierSetController extends Controller
 
             $input = $request->all();
             $business_id = $request->session()->get('user.business_id');
-            $user_id = $request->session()->get('user.id');
+            $user_id = Auth::user()->id;
 
             $modifer_set = Product::where('business_id', $business_id)
                     ->where('id', $modifier_set_id)

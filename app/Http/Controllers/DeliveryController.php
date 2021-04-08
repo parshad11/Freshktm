@@ -13,6 +13,7 @@ use App\User;
 use App\Utils\ModuleUtil;
 use App\Utils\TransactionUtil;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -101,14 +102,14 @@ class DeliveryController extends Controller
             }
 
             if (auth()->user()->can('delivery.view')) {
-                $delivery_person = DeliveryPerson::where('user_id', request()->session()->get('user.id'))->first();
+                $delivery_person = DeliveryPerson::where('user_id', Auth::user()->id)->first();
                 if (isset($delivery_person)) {
                     $deliveries->where('deliveries.delivery_person_id', $delivery_person->id);
                 }
             }
 
             if (!auth()->user()->can('delivery.view') && auth()->user()->can('view_own_delivery')) {
-                $deliveries->where('deliveries.assigned_by', request()->session()->get('user.id'));
+                $deliveries->where('deliveries.assigned_by', Auth::user()->id);
             }
 
 
@@ -202,11 +203,11 @@ class DeliveryController extends Controller
             }
 
             if (!auth()->user()->can('direct_sell.access') && auth()->user()->can('view_own_sell_only')) {
-                $transactions->where('transactions.created_by', request()->session()->get('user.id')->where('transactions.type', 'sell'));
+                $transactions->where('transactions.created_by', Auth::user()->id)->where('transactions.type', 'sell');
             }
 
             if (!auth()->user()->can('purchase.view') && auth()->user()->can('view_own_purchase')) {
-                $transactions->where('transactions.created_by', request()->session()->get('user.id')->where('transactions.type', 'purchase'));
+                $transactions->where('transactions.created_by', Auth::user()->id)->where('transactions.type', 'purchase');
             }
 
             if (request()->has('location_id')) {
@@ -359,13 +360,13 @@ class DeliveryController extends Controller
                     ->where('deliveries.created_at', '<=', $end);
             }
             if (auth()->user()->can('task.view') && auth()->user()->can('delivery.view')) {
-                $delivery_person=DeliveryPerson::where('user_id',request()->session()->get('user.id'))->first();
+                $delivery_person=DeliveryPerson::where('user_id',Auth::user()->id)->first();
                 if(isset($delivery_person)){
                 $currentWorks->where('deliveries.delivery_person_id', $delivery_person->id);
                 }
             } 
             if (!auth()->user()->can('task.view') && auth()->user()->can('view_own_task') && !auth()->user()->can('delivery.view') && auth()->user()->can('view_own_delivery')) {
-                $currentWorks->where('deliveries.assigned_by', request()->session()->get('user.id'));
+                $currentWorks->where('deliveries.assigned_by', Auth::user()->id);
             }
 
             return Datatables::of($currentWorks)
@@ -475,7 +476,7 @@ class DeliveryController extends Controller
 
             $business_id = $request->session()->get('user.business_id');
             $transaction=Transaction::findOrFail($input['transaction_id']);
-            $user_id = $request->session()->get('user.id');
+            $user_id = Auth::user()->id;
             DB::beginTransaction();
             $delivery = Delivery::create([
                 'transaction_id' => $input['transaction_id'],

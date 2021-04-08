@@ -24,6 +24,7 @@ use App\Utils\TransactionUtil;
 use App\Warranty;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class SellController extends Controller
@@ -102,7 +103,7 @@ class SellController extends Controller
             }
 
             if (!auth()->user()->can('direct_sell.access') && auth()->user()->can('view_own_sell_only')) {
-                $sells->where('transactions.created_by', request()->session()->get('user.id'));
+                $sells->where('transactions.created_by', Auth::user()->id);
             }
 
             if (!empty(request()->input('payment_status')) && request()->input('payment_status') != 'overdue') {
@@ -200,7 +201,7 @@ class SellController extends Controller
             }
 
             if (!auth()->user()->can('sell.view') && auth()->user()->can('view_own_sell_only')) {
-                $sells->where('transactions.created_by', request()->session()->get('user.id'));
+                $sells->where('transactions.created_by', Auth::user()->id);
             }
             
             $sells->groupBy('transactions.id');
@@ -582,7 +583,7 @@ class SellController extends Controller
                     },'sell_lines.product', 'sell_lines.product.unit', 'sell_lines.variations', 'sell_lines.variations.product_variation', 'payment_lines', 'sell_lines.modifiers', 'sell_lines.lot_details', 'tax', 'sell_lines.sub_unit', 'table', 'service_staff', 'sell_lines.service_staff', 'types_of_service', 'sell_lines.warranties']);
 
         if (!auth()->user()->can('sell.view') && !auth()->user()->can('direct_sell.access') && auth()->user()->can('view_own_sell_only')) {
-            $query->where('transactions.created_by', request()->session()->get('user.id'));
+            $query->where('transactions.created_by', Auth::user()->id);
         }
 
         $sell = $query->firstOrFail();
@@ -635,7 +636,7 @@ class SellController extends Controller
                     },'sell_lines.product', 'sell_lines.product.unit', 'sell_lines.variations', 'sell_lines.variations.product_variation', 'payment_lines', 'sell_lines.modifiers', 'sell_lines.lot_details', 'tax', 'sell_lines.sub_unit', 'table', 'service_staff', 'sell_lines.service_staff', 'types_of_service', 'sell_lines.warranties']);
 
         if (!auth()->user()->can('sell.view') && !auth()->user()->can('direct_sell.access') && auth()->user()->can('view_own_sell_only')) {
-            $query->where('transactions.created_by', request()->session()->get('user.id'));
+            $query->where('transactions.created_by', Auth::user()->id);
         }
 
         $sell = $query->firstOrFail();
@@ -1103,7 +1104,7 @@ class SellController extends Controller
 
         try {
             $business_id = request()->session()->get('user.business_id');
-            $user_id = request()->session()->get('user.id');
+            $user_id = Auth::user()->id;
 
             $transaction = Transaction::where('business_id', $business_id)
                             ->where('type', 'sell')

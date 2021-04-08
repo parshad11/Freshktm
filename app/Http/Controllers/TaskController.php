@@ -91,14 +91,14 @@ class TaskController extends Controller
             }
 
             if (auth()->user()->can('task.view')) {
-                $delivery_person=DeliveryPerson::where('user_id', request()->session()->get('user.id'))->first();
+                $delivery_person=DeliveryPerson::where('user_id', Auth::user()->id)->first();
                 if(isset($delivery_person)){
                     $tasks->where('tasks.delivery_person_id', $delivery_person->id);
                 }
             }
             
             if (!auth()->user()->can('task.view') && auth()->user()->can('view_own_task')) {
-                $tasks->where('tasks.assigned_by', request()->session()->get('user.id'));
+                $tasks->where('tasks.assigned_by', Auth::user()->id);
             }
          
             $datatable= Datatables::of($tasks)
@@ -198,7 +198,7 @@ class TaskController extends Controller
 
         ]);
         $business_id = $request->session()->get('user.business_id');
-        $user_id = $request->session()->get('user.id');
+        $user_id = Auth::user()->id;
         $task_details['assigned_by'] = $user_id;
         $task_details['business_id'] = $business_id;
         DB::beginTransaction(); 

@@ -12,6 +12,7 @@ use App\TransactionSellLine;
 
 use App\Utils\Util;
 use App\Utils\RestaurantUtil;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -45,7 +46,7 @@ class OrderController extends Controller
         //     abort(403, 'Unauthorized action.');
         // }
         $business_id = request()->session()->get('user.business_id');
-        $user_id = request()->session()->get('user.id');
+        $user_id = Auth::user()->id;
 
         $is_service_staff = false;
         $orders = [];
@@ -80,7 +81,7 @@ class OrderController extends Controller
         // }
         try {
             $business_id = request()->session()->get('user.business_id');
-            $user_id = request()->session()->get('user.id');
+            $user_id = Auth::user()->id;
 
             $query = TransactionSellLine::leftJoin('transactions as t', 't.id', '=', 'transaction_sell_lines.transaction_id')
                         ->where('t.business_id', $business_id)
@@ -114,7 +115,7 @@ class OrderController extends Controller
     {
         try {
             $business_id = request()->session()->get('user.business_id');
-            $user_id = request()->session()->get('user.id');
+            $user_id = Auth::user()->id;
 
             $query = TransactionSellLine::where('id', $id);
 
