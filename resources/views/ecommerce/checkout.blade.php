@@ -29,12 +29,12 @@
                     <div id="collapseOne" class="panel-collapse collapse in" aria-expanded="true" style="height: auto;">
                       <div class="panel-body">
                         <div class="items">
-                          <div class="col-md-9">
+                          <div class="col-md-12">
                             <table class="table table-striped">
 
                               <tbody>
                                   @forelse ($cart_items as $item)
-                                <tr>
+                                <tr class="table-column">
                                     <td>
                                       <ul>
                                         <li><b>{{$item->variation->product->name}}&nbsp;{{$item->variation->name != 'DUMMY' ? $item->variation->name : '' }}</b></li>
@@ -53,10 +53,11 @@
                                   @endforelse
                             </tbody></table>
                           </div>
-                          <div class="col-md-3">
-                            <div style="text-align: center;">
-                              <h3>Order Total</h3>
-                              <h3><span style="color:green;">Rs :{{ number_format($total_price,2) }}</span></h3>
+                          <div class="col-md-12">
+                            <hr>
+                            <div class="order-total text-right">
+                              <h4>Order Total</h3>
+                              <h5><span style="color:green;">Rs : {{ number_format($total_price,2) }}</span></h3>
                             </div>
                           </div>
                         </div>
@@ -85,7 +86,7 @@
 
                       <table class="table table-striped" style="font-weight: bold;">
                         <tbody>
-                        <tr>
+                        <tr class="table-column">
                           <td style="width: 175px;">
                             <label for="id_address_line_1">Shipping Address:</label>
                           </td>

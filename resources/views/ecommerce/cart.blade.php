@@ -21,20 +21,15 @@
                     @include('ecommerce.cart_detail')
 
                     <div class="panel-footer">
-                        <div class="row text-center">
-
-                            <div class="col-xs-4">
-                                <a href="{{route('shop')}}" class="btn btn-primary btn-block">
-                                    <i class="fa fa-reply" aria-hidden="true"></i> Continue shopping
-                                </a>
-
-                            </div>
-                            {{-- <div class="col-xs-4">
-                              <h4 class="text-right" id="cart_total_price">Total <strong>Rs : {{$total_sum}}</strong></h4>
-                            </div> --}}
-                            <div class="col-xs-3">
+                        <div class="row text-right" >
+                            <div class="col-xs-3 col-md-3 " style="float: right!important; margin-top:6px;">
                                 <a type="button" class="btn btn-success btn-block" href="{{route('product.checkout')}}">
                                     Checkout
+                                </a>
+                            </div>
+                            <div class="col-xs-4 col-md-3" style="float: right!important; margin-top:6px;">
+                                <a href="{{route('shop')}}" class="btn btn-primary btn-block">
+                                    <i class="fa fa-reply" aria-hidden="true"></i> Continue shopping
                                 </a>
                             </div>
                         </div>

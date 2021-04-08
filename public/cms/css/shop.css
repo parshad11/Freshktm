@@ -510,7 +510,38 @@
         padding-bottom: 5px;
     }
 }
+
+.table-column{
+    display: flex;
+}
+
+.table-column>td{
+    align-self: center;
+    border: none!important;
+    margin: auto;
+    margin-left: 0;
+}
 @media only screen and (max-width: 600px) {
+
+    .order-total{
+        text-align: center;
+    }
+
+    .table-column>td{
+        
+        margin: auto;
+        
+    }
+
+    .table-column{
+        display: flex;
+    flex-direction: column;
+    text-align: center;
+    }
+
+    .table-column>td:nth-child(even){
+        border-top: none;
+    }
     .shop .shop-banner {
         height: 150px;
     }

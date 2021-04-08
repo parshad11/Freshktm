@@ -48,7 +48,7 @@
         @endforeach
         <div class="row">
             <div class="col-xs-12 text-right">
-                <h4 class="">Total <strong>Rs : {{ number_format($total_sum,2) }}</strong></h4>
+                <h4 class="" style="margin-top:2%;">Total <strong>Rs : {{ number_format($total_sum,2) }}</strong></h4>
             </div>
         </div>
     @else
