@@ -120,15 +120,12 @@ class DeliveryController extends Controller
 
     public function update(Request $request, $id)
     {
-
+        if (!auth()->user()->can('delivery.view')) {
+			abort(403, 'Unauthorized action.');
+		}
         try {
             $delivery = Delivery::findorfail($id);
-            if ($delivery->delivery_status == 'delivered') {
-                $delivered_status_set = 1;
-            } else if ($delivery->delivery_status == 'shipped') {
-                $shipped_status_set = 1;
-            }
-
+           
             $transaction = Transaction::findorFail($delivery->transaction_id);
 
             DB::beginTransaction();
@@ -155,7 +152,7 @@ class DeliveryController extends Controller
                 }
             }
 
-            if (!isset($shipped_status_set) && $request->delivery_status == 'shipped') {
+            if ($request->delivery_status == 'shipped') {
                 $delivery_started_at = now();
                 $delivery->delivery_started_at = $delivery_started_at;
                 $delivery->save();
@@ -168,7 +165,7 @@ class DeliveryController extends Controller
                 }
             }
 
-            if (!isset($delivered_status_set) && $request->delivery_status == 'delivered') {
+            if ($request->delivery_status == 'delivered') {
                 $delivery_ended_at = now();
                 $delivery->delivery_ended_at = $delivery_ended_at;
                 $delivery->save();

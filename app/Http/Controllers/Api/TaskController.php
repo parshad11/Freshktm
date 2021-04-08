@@ -30,17 +30,11 @@ class TaskController extends Controller
 
 	public function update(Request $request,$id)
 	{
-		if (!auth()->user()->can('task.update')) {
+		if (!auth()->user()->can('task.view')) {
 			abort(403, 'Unauthorized action.');
 		}
 		try {
 			$task = Task::findorfail($id);
-			if ($task->task_status == 'completed') {
-				$completed_status_set = 1;
-			} else if ($task->task_status == 'on process') {
-				$on_process_status_set = 1;
-			}
-
 			DB::beginTransaction();
 			$update_data['task_status'] = $request->input('task_status');
 			$task->update($update_data);
@@ -50,22 +44,17 @@ class TaskController extends Controller
 				$task->ended_at = null;
 				$task->save();
 			}
-			if (!isset($on_process_status_set) && $task->task_status == 'on process') {
+			if ( $task->task_status == 'on process') {
 				$started_at = now();
 				$task->started_at = $started_at;
 				$task->save();
 			}
-			if (!isset($completed_status_set) && $task->task_status == 'completed') {
+			if ($task->task_status == 'completed') {
 				$ended_at = now();
 				$task->ended_at = $ended_at;
 				$task->save();
 			}
-			if ($task->task_status == 'cancelled') {
-				$task->started_at = null;
-				$task->ended_at = null;
-				$task->save();
 
-			}
 			DB::commit();
 		} catch (\Exception $e) {
 			DB::rollBack();
