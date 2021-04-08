@@ -780,7 +780,7 @@ class PurchaseController extends Controller
             }
 
             $business_id = request()->session()->get('user.business_id');
-            $user_id = request()->session()->get('user.id');
+            $user_id = Auth::user()->id;
 
             $query = Contact::where('business_id', $business_id)
                 ->active();

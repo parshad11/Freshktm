@@ -18,6 +18,7 @@ use App\DeliveryPerson;
 use App\Notifications\DeliveryAssignedNotification;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StockTransferController extends Controller
 {
@@ -195,8 +196,7 @@ class StockTransferController extends Controller
 
             $input_data = $request->only(['location_id', 'ref_no', 'transaction_date', 'additional_notes', 'shipping_charges', 'final_total','assign_delivery','shipping_details']);
             $status = $request->input('status');
-            $user_id = $request->session()->get('user.id');
-
+            $user_id = Auth::user()->id;
             $input_data['final_total'] = $this->productUtil->num_uf($input_data['final_total']);
             $input_data['total_before_tax'] = $input_data['final_total'];
             $input_data['type'] = 'sell_transfer';
