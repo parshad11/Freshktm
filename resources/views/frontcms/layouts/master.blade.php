@@ -257,6 +257,7 @@
 
                 },
                 error: function (response) {
+                    console.log(response)
                     if (response.error) {
                         window.location.href = document.location.origin + '/shop/login';
                     }
