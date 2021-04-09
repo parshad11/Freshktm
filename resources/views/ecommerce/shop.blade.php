@@ -23,8 +23,8 @@
         <div class="content container" id="content">
             @if(Request::segment(2)=='category')
                 <ol class="breadcrumb">
-                    <li><a href="http://127.0.0.1:8000">Home</a></li>
-                    <li><a href="http://127.0.0.1:8000/shop">Shop</a></li>
+                    <li><a href="{{ route('front_dashboard') }}">Home</a></li>
+                    <li><a href="{{ route('shop') }}    ">Shop</a></li>
                     <li class="active">{{$category->name}}</li>
                 </ol>
             @endif
